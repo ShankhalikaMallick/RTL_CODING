@@ -5,7 +5,7 @@ RTL CODE:
 
 // DAY-1 NAND gate to implement all gates: NAND, NOT, AND. OR, NOR, XOR, XNOR
 
-module NAND(a,b,nandab,nota,andab,orab,norab,xorab,xnorab);
+module NAND_GATE(a,b,nandab,nota,andab,orab,norab,xorab,xnorab);
     input a,b;
     output nandab,nota,andab,orab,norab,xorab,xnorab;
     wire notb;
@@ -42,12 +42,12 @@ endmodule
 
 TESTBENCH:
 `timescale 1ns / 1ps
-`include "NAND.v"
+`include "NAND_GATE.v"
 
 module NAND_TB();
     reg a,b;
     wire nandab,nota,andab,orab,norab,xorab,xnorab;
-    NAND ob(a,b,nandab,nota,andab,orab,norab,xorab,xnorab);
+    NAND_GATE ob(a,b,nandab,nota,andab,orab,norab,xorab,xnorab);
     initial
     begin
          $display ("A  B  (A.B)'  !A   AB   A|B  (A|B)'   A^B   (A^B)' ");
