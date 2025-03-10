@@ -3,7 +3,7 @@ RTL CODE:
 //Date : 10/03/2025
 //Name : Shankhalika Mallick
 
-// DAY-4 HALF ADDER IMPLEMENTATION
+// DAY-5 HALF ADDER IMPLEMENTATION
 
 module HA(a,b,sum,carry);
     input a,b;
