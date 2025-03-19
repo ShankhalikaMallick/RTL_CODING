@@ -3,7 +3,7 @@ RTL:
 //Date : 17/03/2025
 //Name : Shankhalika Mallick
 
-// DAY-12 2X1 MUX
+// DAY-13 2X1 MUX
 
 module MUX21(A,sel,out);
 input [1:0]A;
