@@ -1,0 +1,87 @@
+RTL CODE:
+`timescale 1ns / 1ps
+//Date : 19/03/2025
+//Name : Shankhalika Mallick
+
+// DAY-14 2X1 MUX
+
+module MUX21(A,sel,out);
+input [1:0]A;
+input sel;
+output out;
+assign out=(sel==0)?A[0]:A[1];
+endmodule
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+`timescale 1ns / 1ps
+`include "MUX21.v"
+//Date : 19/03/2025
+//Name : Shankhalika Mallick
+
+// DAY-14 8X1 MUX USING 7 2X1 MUX
+
+module MUX81(A,sel,out);
+input [7:0]A;
+input [2:0]sel;
+output out;
+wire [5:0]w;
+    MUX21 ob1(A[1:0],sel[0],w[0]);
+    MUX21 ob2(A[3:2],sel[0],w[1]);
+    MUX21 ob3(A[5:4],sel[0],w[2]);
+    MUX21 ob4(A[7:6],sel[0],w[3]);
+    MUX21 ob5(w[1:0],sel[1],w[4]);
+    MUX21 ob6(w[3:2],sel[1],w[5]);
+    MUX21 ob7(w[5:4],sel[2],out);
+endmodule
+
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+TESTBENCH:
+
+`timescale 1ns/1ps
+`include "MUX81.v"
+
+module MUX81_TB();
+reg [2:0]sel;
+reg [7:0] A;
+wire out;
+MUX81 ob(A,sel,out);
+initial
+begin
+    $dumpfile("MUX81.vcd");
+    $dumpvars(0,MUX81_TB);
+    A[0]=0; A[1]=1; A[2]=0; A[3]=1; A[4]=0; A[5]=1; A[6]=1; A[7]=0; 
+    #5 sel[0]=0;sel[1]=0; sel[2]=0;
+    #5 sel[0]=0;sel[1]=0; sel[2]=1;
+    #5 sel[0]=0;sel[1]=1; sel[2]=0;
+    #5 sel[0]=0;sel[1]=1; sel[2]=1;
+    #5 sel[0]=1;sel[1]=0; sel[2]=0;
+    #5 sel[0]=1;sel[1]=0; sel[2]=1;
+    #5 sel[0]=1;sel[1]=1; sel[2]=0;
+    #5 sel[0]=1;sel[1]=1; sel[2]=1;
+    end
+initial
+begin
+    $display("\tA[0]=%b\tA[1]=%b\tA[2]=%b\tA[3]=%b\tA[4]=%b\tA[5]=%b\tA[6]=%b\tA[7]=%b",A[0],A[1],A[2],A[3],A[4],A[5],A[6],A[7]);
+    #8 $monitor($time,"\tsel=%b\tout=%b",sel[2:0],out);
+    end
+endmodule
+
+
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+OUTPUT:
+[Running] MUX81_TB.v
+VCD info: dumpfile MUX81.vcd opened for output.
+	A[0]=0	A[1]=1	A[2]=0	A[3]=1	A[4]=0	A[5]=1	A[6]=1	A[7]=0
+                   8	sel=000	out=0
+                  10	sel=100	out=0
+                  15	sel=010	out=0
+                  20	sel=110	out=1
+                  25	sel=001	out=1
+                  30	sel=101	out=1
+                  35	sel=011	out=1
+                  40	sel=111	out=0
+[Done] exit with code=0 in 5.687 seconds
+
