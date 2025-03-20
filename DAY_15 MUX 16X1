@@ -1,0 +1,121 @@
+RTL:
+`timescale 1ns / 1ps
+//Date : 20/03/2025
+//Name : Shankhalika Mallick
+
+// DAY-15 2X1 MUX
+
+module MUX21(A,sel,out);
+input [1:0]A;
+input sel;
+output out;
+assign out=(sel==0)?A[0]:A[1];
+endmodule
+
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+`timescale 1ns / 1ps
+`include "MUX21.v"
+//Date : 20/03/2025
+//Name : Shankhalika Mallick
+
+// DAY-15 4X1 MUX USING 15 2X1 MUX
+
+module MUX161(A,sel,out);
+input [15:0]A;
+input [3:0]sel;
+output out;
+wire [13:0]w;
+
+    MUX21 ob1(A[1:0],sel[0],w[0]);
+    MUX21 ob2(A[3:2],sel[0],w[1]);
+    MUX21 ob3(A[5:4],sel[0],w[2]);
+    MUX21 ob4(A[7:6],sel[0],w[3]);
+    MUX21 ob5(A[9:8],sel[0],w[4]);
+    MUX21 ob6(A[11:10],sel[0],w[5]);
+    MUX21 ob7(A[13:12],sel[0],w[6]);
+    MUX21 ob8(A[15:14],sel[0],w[7]);
+
+    MUX21 ob9(w[1:0],sel[1],w[8]);
+    MUX21 ob10(w[3:2],sel[1],w[9]);
+    MUX21 ob11(w[5:4],sel[1],w[10]);
+    MUX21 ob12(w[7:6],sel[1],w[11]);
+
+    MUX21 ob13(w[9:8],sel[2],w[12]);
+    MUX21 ob14(w[11:10],sel[2],w[13]);
+
+    MUX21 ob15(w[13:12],sel[3],out);
+endmodule
+
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+TESTBENCH:
+`timescale 1ns/1ps
+`include "MUX161.v"
+
+module MUX161_TB();
+reg [3:0]sel;
+reg [15:0] A;
+wire out;
+MUX161 ob(A,sel,out);
+initial
+begin
+    $dumpfile("MUX161.vcd");
+    $dumpvars(0,MUX161_TB);
+    A[0]=0; A[1]=1; A[2]=0; A[3]=1; A[4]=0; A[5]=1; A[6]=1; A[7]=0; 
+    A[8]=1; A[9]=0; A[10]=1; A[11]=0; A[12]=1; A[13]=0; A[14]=0; A[15]=1;
+    #5 sel[0]=0;sel[1]=0; sel[2]=0; sel[3]=0;
+    #5 sel[0]=0;sel[1]=0; sel[2]=1; sel[3]=0;
+    #5 sel[0]=0;sel[1]=1; sel[2]=0; sel[3]=0;
+    #5 sel[0]=0;sel[1]=1; sel[2]=1; sel[3]=0;
+    #5 sel[0]=1;sel[1]=0; sel[2]=0; sel[3]=0;
+    #5 sel[0]=1;sel[1]=0; sel[2]=1; sel[3]=0;
+    #5 sel[0]=1;sel[1]=1; sel[2]=0; sel[3]=0;
+    #5 sel[0]=1;sel[1]=1; sel[2]=1; sel[3]=0;
+    #5 sel[0]=0;sel[1]=0; sel[2]=0; sel[3]=1;
+    #5 sel[0]=0;sel[1]=0; sel[2]=1; sel[3]=1;
+    #5 sel[0]=0;sel[1]=1; sel[2]=0; sel[3]=1;
+    #5 sel[0]=0;sel[1]=1; sel[2]=1; sel[3]=1;
+    #5 sel[0]=1;sel[1]=0; sel[2]=0; sel[3]=1;
+    #5 sel[0]=1;sel[1]=0; sel[2]=1; sel[3]=1;
+    #5 sel[0]=1;sel[1]=1; sel[2]=0; sel[3]=1;
+    #5 sel[0]=1;sel[1]=1; sel[2]=1; sel[3]=1;
+    end
+initial
+begin
+    $display("\tA[0]=%b\tA[1]=%b\tA[2]=%b\tA[3]=%b\tA[4]=%b\tA[5]=%b\tA[6]=%b\tA[7]=%b",A[0],A[1],A[2],A[3],A[4],A[5],A[6],A[7]);
+    $display("\tA[8]=%b\tA[9]=%b\tA[10]=%b\tA[11]=%b\tA[12]=%b\tA[13]=%b\tA[14]=%b\tA[15]=%b",A[8],A[9],A[10],A[11],A[12],A[13],A[14],A[15]);
+    #8 $monitor($time,"\tsel=%b\tout=%b",sel[3:0],out);
+    end
+endmodule
+
+
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+OUTPUT:
+[Running] MUX161_TB.v
+VCD info: dumpfile MUX161.vcd opened for output.
+	A[0]=0	A[1]=1	A[2]=0	A[3]=1	A[4]=0	A[5]=1	A[6]=1	A[7]=0
+	A[8]=1	A[9]=0	A[10]=1	A[11]=0	A[12]=1	A[13]=0	A[14]=0	A[15]=1
+                   8	sel=0000	out=0
+                  10	sel=0100	out=0
+                  15	sel=0010	out=0
+                  20	sel=0110	out=1
+                  25	sel=0001	out=1
+                  30	sel=0101	out=1
+                  35	sel=0011	out=1
+                  40	sel=0111	out=0
+                  45	sel=1000	out=1
+                  50	sel=1100	out=1
+                  55	sel=1010	out=1
+                  60	sel=1110	out=0
+                  65	sel=1001	out=0
+                  70	sel=1101	out=0
+                  75	sel=1011	out=0
+                  80	sel=1111	out=1
+[Done] exit with code=0 in 3.404 seconds
+
+
+
