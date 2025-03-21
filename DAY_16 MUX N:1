@@ -23,22 +23,36 @@ module MUX_TB();
 reg [63:0]A;
 reg [5:0]s;
 wire o;
-integer seed=63;
+integer seed=15;
 integer i;
-mux_nto1 #(.N(64)) ob(.A(in),sel(s),out(o));
+parameter N=64;
+mux_nto1 #(.N(N)) ob(.A(A),.sel(s),.out(o));
 
 initial
 begin
 for(i=0;i<63;i=i+1)
 A[i]=$random(seed);
 #10 s=14;
-#10 s=50;
-#10 s=34;
+#10 s=59;
+#10 s=64;
 end
 initial
 begin
     $dumpfile("muxn1.vcd");
     $dumpvars(0,MUX_TB);
-    $monitor("%d\t%d",s,o);
+    $display("sel\tout");
+    #15 $monitor("%d\t%d",s,o);
 end 
 endmodule
+
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+OUTPUT:
+[Running] MUX_TB.v
+VCD info: dumpfile muxn1.vcd opened for output.
+sel	out
+14	1
+59	0
+ 0	0
+[Done] exit with code=0 in 0.205 seconds
+
