@@ -1,0 +1,44 @@
+RTL:
+`timescale 1ns / 1ps
+//Date : 21/03/2025
+//Name : Shankhalika Mallick
+
+// DAY-16 N:1 MUX
+
+module mux_nto1 #(parameter N=64)(A,sel,out);
+input [k-1:0] A;
+input [5:0] sel;
+output out;
+assign out= A[sel];
+endmodule
+
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+TESTBENCH:
+`timescale 1ns/1ps
+`include "MUX.v"
+
+module MUX_TB();
+reg [63:0]A;
+reg [5:0]s;
+wire o;
+integer seed=63;
+integer i;
+mux_nto1 #(.N(64)) ob(.A(in),sel(s),out(o));
+
+initial
+begin
+for(i=0;i<63;i=i+1)
+A[i]=$random(seed);
+#10 s=14;
+#10 s=50;
+#10 s=34;
+end
+initial
+begin
+    $dumpfile("muxn1.vcd");
+    $dumpvars(0,MUX_TB);
+    $monitor("%d\t%d",s,o);
+end 
+endmodule
