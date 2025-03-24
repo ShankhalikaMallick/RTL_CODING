@@ -1,0 +1,68 @@
+RTL CODE:
+`timescale 1ns / 1ps
+//Date : 23/03/2025
+//Name : Shankhalika Mallick
+
+// DAY-18 8:1 DEMUX
+
+module DEMUX1_32(sel,data,out);
+input [4:0] sel;
+input data;
+output reg [31:0]out;
+always @(*)
+begin
+    out[sel]=data;
+end
+endmodule
+
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+TESTBENCH:
+`include "DEMUX321.v"
+`timescale 1ns/1ps
+
+module DEMUX1TO32_TB();
+reg [4:0]sel;
+reg data;
+wire [31:0] A;
+integer seed=5;
+DEMUX1_32 ob(sel,data,A);
+assign out=A[sel];
+initial
+begin
+    $dumpfile("DEMUX.vcd");
+    $dumpvars(0,DEMUX1TO32_TB);
+    #5 $display("D\tsel\tA[]");
+    #2 $monitor("%d\t%d\tA[%d]=%d",data,sel,sel,out);
+end
+initial
+begin
+    #5 data=$random(seed);
+    sel=5'b10011;
+    #5 sel=5'b01101;
+    #5 data=$random(seed);
+     sel=5'b10110;
+     #5 sel=5'b01110;
+    #5 data=$random(seed);
+     sel=5'b01001;
+    #5 sel=5'b10110;
+end
+endmodule
+
+
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+OUTPUT:
+[Running] DEMUX321_TB.v
+VCD info: dumpfile DEMUX.vcd opened for output.
+D	sel	A[]
+0	19	A[19]=0
+0	13	A[13]=0
+1	22	A[22]=1
+1	14	A[14]=1
+0	 9	A[ 9]=0
+0	22	A[22]=0
+[Done] exit with code=0 in 0.178 seconds
+
+
+
