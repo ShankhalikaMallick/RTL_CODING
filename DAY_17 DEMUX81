@@ -1,0 +1,62 @@
+RTL CODE:
+`timescale 1ns / 1ps
+//Date : 22/03/2025
+//Name : Shankhalika Mallick
+
+// DAY-17 8:1 DEMUX
+
+module DEMUX81(D,S,A);
+input D;
+input [2:0] S;
+output reg [7:0] A;
+always @(*)
+begin
+    A[S]=D;
+    end
+endmodule
+
+
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+TESTBENCH:
+`include "DEMUX81.v"
+`timescale 1ns/1ps
+
+module DEMUX_TB();
+reg [2:0]S;
+reg D;
+wire [7:0]A;
+wire out;
+integer seed=5;
+DEMUX81 ob(D,S,A);
+assign out=A[S];
+initial
+begin
+    D=$random(seed);
+    #5 S=3'b000;
+    #5 S=3'b101;
+    #5 D=$random(seed); S=3'b010;
+    #5 D=$random(seed); S=3'b111;
+end
+initial
+begin
+    $dumpfile("DEMUX81.vcd");
+    $dumpvars(0,DEMUX_TB);
+    #5 $display("D\tsel\tA[]");
+    #2 $monitor("%d\t%d\tA[%d]=%d",D,S,S,out);
+end
+
+endmodule
+
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+OUTPUT:
+[Running] DEMUX_TB.v
+VCD info: dumpfile DEMUX81.vcd opened for output.
+D	sel	A[]
+0	0	A[0]=0
+0	5	A[5]=0
+1	2	A[2]=1
+0	7	A[7]=0
+[Done] exit with code=0 in 0.174 seconds
