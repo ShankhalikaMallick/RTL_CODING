@@ -1,0 +1,70 @@
+RTL:
+`timescale 1ns / 1ps
+//Date : 25/03/2025
+//Name : Shankhalika Mallick
+
+// DAY-20 N BIT COMPARATOR (USING PARAMETER)
+
+module COMPBNIT(A,B,LT,GT,EQ);
+parameter N=8;
+input [N-1:0]A,B;
+output reg LT=0,GT=0,EQ=0;
+integer i=0;
+always @(*)
+begin
+// NOTE : WE DONT ALWAYS GET INITIAL CONDITIONS WHILE GIVING A TEST BENCH STIMULUS
+// SO WE HAVE TO INITIALISE THE OTHER VARIABLES
+    if(A>B)
+    begin
+        GT=1; EQ=0; LT=0;
+    end
+    else if( A<B)
+    begin
+        GT=0; EQ=0; LT=1;
+    end
+    else
+    begin
+        GT=0; EQ=1; LT=0;
+    end
+end
+endmodule
+
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+TESTBENCH:
+`include "COMPNBIT.v"
+`timescale 1ns/1ps
+
+module COMPN_TB();
+parameter n=8;
+reg [n-1:0] a,b;
+wire lt,gt,eq;
+COMPBNIT ob (.A(a),.B(b),.LT(lt),.GT(gt),.EQ(eq));
+initial
+begin
+    #5 a=16; b=5;
+    #5 a=15; b=22;
+    #5 a=12; b=10;
+    #5 a=10; b=10;
+end
+initial
+begin
+    $dumpfile("COMPN.vcd");
+    $dumpvars(0,COMPN_TB);
+    #5 $display(" A\t  B LT\tGT\tEQ");
+    #2 $monitor("%d\t%d\t%b\t%b\t%b",a,b,lt,gt,eq);
+end
+endmodule
+
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+OUTPUT:
+[Running] COMPN_TB.v
+VCD info: dumpfile COMPN.vcd opened for output.
+ A	  B LT	GT	EQ
+ 16	  5	0	1	0
+ 15	 22	1	0	0
+ 12	 10	0	1	0
+ 10	 10	0	0	1
+[Done] exit with code=0 in 1.041 seconds
+
