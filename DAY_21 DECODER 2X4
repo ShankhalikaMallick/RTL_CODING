@@ -1,0 +1,54 @@
+RTL:
+`timescale 1ns / 1ps
+//Date : 26/03/2025
+//Name : Shankhalika Mallick
+
+// DAY-21 2x4 DECODER
+
+module DECODER2X4(A,out);
+input [1:0]A;
+output reg [3:0] out;
+always @(*)
+begin
+   out=4'b0;
+   out[A]=1;
+end
+endmodule
+
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+TESTBENCH:
+`include "DECODER2X4.v"
+`timescale 1ns/1ps
+
+module DECODER2X4_TB();
+reg [1:0] ip;
+wire [3:0] op;
+DECODER2X4 ob (.A(ip),.out(op));
+initial
+begin
+    $dumpfile("DECODER24.vcd");
+    $dumpvars(0,DECODER2X4_TB);
+    #5 $display("input  output");
+    #2 $monitor("%b\t\t%b",ip,op);
+end
+initial
+begin
+    #5 ip=2'b00;
+    #5 ip=2'b01;
+    #5 ip=2'b10;
+    #5 ip=2'b11;   
+end 
+endmodule
+
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+OUTPUT:
+[Running] DECODER2X4_TB.v
+VCD info: dumpfile DECODER24.vcd opened for output.
+input  output
+00		0001
+01		0010
+10		0100
+11		1000
+[Done] exit with code=0 in 0.207 seconds
