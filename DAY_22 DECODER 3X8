@@ -1,0 +1,63 @@
+RTL:
+`timescale 1ns / 1ps
+//Date : 27/03/2025
+//Name : Shankhalika Mallick
+
+// DAY-22 3X8 DECODER
+
+module DECODER3X8(A,out);
+input [2:0]A;
+output reg [7:0] out;
+always @(*)
+begin
+   out=8'b0;
+   out[A]=1;
+end
+endmodule
+
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+TESTBENCH:
+`include "DECODER3X8.v"
+`timescale 1ns/1ps
+
+module DECODER3X8_TB();
+reg [2:0] ip;
+wire [7:0] op;
+DECODER3X8 ob (.A(ip),.out(op));
+initial
+begin
+    $dumpfile("DECODER38.vcd");
+    $dumpvars(0,DECODER3X8_TB);
+    #5 $display("input \t output");
+    #2 $monitor("%b\t\t%b",ip,op);
+end
+initial
+begin
+    #5 ip=3'b000;
+    #5 ip=3'b001;
+    #5 ip=3'b010;
+    #5 ip=3'b011;
+    #5 ip=3'b100;
+    #5 ip=3'b101;
+    #5 ip=3'b110;
+    #5 ip=3'b111;
+end 
+endmodule
+
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+OUTPUT:
+
+[Running] DECODER3X8_TB.v
+VCD info: dumpfile DECODER38.vcd opened for output.
+input 	 output
+000		00000001
+001		00000010
+010		00000100
+011		00001000
+100		00010000
+101		00100000
+110		01000000
+111		10000000
+[Done] exit with code=0 in 0.155 seconds
