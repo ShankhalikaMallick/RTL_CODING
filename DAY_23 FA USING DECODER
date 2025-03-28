@@ -1,0 +1,23 @@
+RTL:
+`timescale 1ns / 1ps
+//Date : 28/03/2025
+//Name : Shankhalika Mallick
+
+// DAY-23 FULL ADDER USING DECODER
+
+module FA_DEC(A,B,C,SUM,CARRY);
+input A,B,C;
+output SUM,CARRY;
+reg [7:0] out;
+wire [2:0] index;
+
+assign index={A,B,C};
+always @(*)
+begin
+out=8'b0;
+out[index]=1;
+end
+
+assign SUM=out[1]|out[2]|out[4]|out[7];
+assign CARRY=out[3]|out[5]|out[6]|out[7];
+endmodule
