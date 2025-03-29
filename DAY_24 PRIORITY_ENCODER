@@ -1,0 +1,84 @@
+RTL:
+`timescale 1ns / 1ps
+//Date : 29/03/2025
+//Name : Shankhalika Mallick
+
+// DAY-24 8X3 PRIORITY ENCODER
+
+module PR_ENC(A,PR);
+input [7:0]A;
+output reg [2:0] PR;
+reg V;
+always @(*)
+begin
+    V=0;
+    if(A[7]==1)
+    PR=3'b111;
+    else if(A[6]==1)
+    PR=3'b110;
+    else if(A[5]==1)
+    PR=3'b101;
+    else if(A[4]==1)
+    PR=3'b100;
+    else if(A[3]==1)
+    PR=3'b011;
+    else if(A[2]==1)
+    PR=3'b010;
+    else if(A[1]==1)
+    PR=3'b001;
+    else if(A[0]==1)
+    PR=3'b000;
+    else 
+    begin
+    PR=3'bZZZ;
+    V=1;
+    end
+end
+endmodule
+
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+TESTBENCH:
+`include "PR_ENC.v"
+`timescale 1ns/1ps
+
+module PR_ENC_TB();
+reg [7:0]A;
+wire [2:0]out;
+PR_ENC ob(.A(A),.PR(out));
+initial
+begin
+    $dumpfile ("PR_ENC.vcd");
+    $dumpvars(0,PR_ENC_TB);
+    #5 $display("A\t\t\tOUT");
+    #2 $monitor("%b\t%b",A,out);
+end
+initial
+begin
+    #5 A=8'b10010111;
+    #5 A=8'b01010101;
+    #5 A=8'b00111101;
+    #5 A=8'b00011111;
+    #5 A=8'b00000101;
+    #5 A=8'b00000011;
+    #5 A=8'b00000001;
+    #5 A=8'b00000000;
+end
+endmodule
+
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+OUTPUT:
+[Running] PR_ENC_TB.v
+VCD info: dumpfile PR_ENC.vcd opened for output.
+A		    	OUT
+10010111	111
+01010101	110
+00111101	101
+00011111	100
+00000101	010
+00000011	001
+00000001	000
+00000000	zzz
+[Done] exit with code=0 in 2.45 seconds
+
