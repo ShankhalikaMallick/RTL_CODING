@@ -1,0 +1,22 @@
+RTL:
+`timescale 1ns / 1ps
+//Date : 30/03/2025
+//Name : Shankhalika Mallick
+
+// DAY-25 TRISTATE BUFFER
+
+module TRI_BUFF(en,in,op);
+input en, in;
+output reg op;
+always @(*)
+begin
+    if(en==1)
+    op=in;
+    else
+    op=1'bZ;
+end
+endmodule
+
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+TESTBENCH:
