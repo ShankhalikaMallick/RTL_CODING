@@ -1,0 +1,21 @@
+RTL:
+`timescale 1ns / 1ps
+//Date : 31/03/2025
+//Name : Shankhalika Mallick
+
+// DAY-26 4 BIT BINARY TO GRAY CODE CONVERSION
+
+module BIN_GRAY(B,G);
+parameter N=4;
+input [N-1:0]B;
+output reg [N-1:0] G;
+integer i;
+always @(*)
+begin
+    G[N-1]=B[N-1];
+  for(i=N-2;i>=0;i=i-1)
+  begin
+    G[i]=B[i]^B[i+1];
+  end
+end
+endmodule
