@@ -1,0 +1,53 @@
+RTL:
+`timescale 1ns / 1ps
+//Date : 01/04/2025
+//Name : Shankhalika Mallick
+
+// DAY-27 4 BIT GRAY TO BINARY CODE CONVERSION
+
+module GRAY_BIN(G,B);
+parameter N=4;
+input [N-1:0]G;
+output reg [N-1:0] B;
+integer i;
+always @(*)
+begin
+    B[N-1]=G[N-1];
+  for(i=N-2;i>=0;i=i-1)
+  begin
+    B[i]=G[i]^B[i+1];
+  end
+end
+endmodule
+
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+TESTBENCH:
+`include "GRAY_BIN.v"
+`timescale 1ns/1ps
+
+module GB_TB();
+parameter N=4;
+reg [N-1:0] G;
+wire [N-1:0] B;
+GRAY_BIN ob(G,B);
+initial
+begin
+    $dumpfile ("GB.vcd");
+    $dumpvars(0,GB_TB);
+    #5 $display("GRAY \t BIN");
+    #2 $monitor("%b\t%b",G,B);
+end
+initial
+begin
+    #5 G=4'b0000;
+    #5 G=4'b0010;
+    #5 G=4'b1100;
+    #5 G=4'b0101;
+    #5 G=4'b0110;
+    #5 G=4'b0011;
+    #5 G=4'b1011;
+    #5 G=4'b0100;
+    #5 G=4'b1110;
+end
+endmodule
