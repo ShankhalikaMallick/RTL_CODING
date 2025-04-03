@@ -1,0 +1,13 @@
+RTL:
+`timescale 1ns / 1ps
+//Date : 02/04/2025
+//Name : Shankhalika Mallick
+
+// DAY-28 FULL SUBSTRACTOR
+
+module FS(A,B,C,DIFF,BORROW);
+input A,B,C;
+output DIFF,BORROW;
+assign DIFF=A^B^C;
+assign BORROW=(~A&C)|(~A&B)|(B&C);
+endmodule
