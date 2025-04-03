@@ -1,0 +1,16 @@
+RTL:
+`timescale 1ns / 1ps
+//Date : 03/04/2025
+//Name : Shankhalika Mallick
+
+// DAY-29 CMOS INVERTER
+
+module CMOSINV(vin,vout);
+supply1 high;
+supply0 low;
+input vin;
+output vout;
+
+pmos p1(vout,high,vin);
+nmos n1(vout,low,vin);
+endmodule
