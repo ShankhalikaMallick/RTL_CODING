@@ -14,3 +14,38 @@ output vout;
 pmos p1(vout,high,vin);
 nmos n1(vout,low,vin);
 endmodule
+
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+TESTBENCH:
+`include "CMOS.v"
+`timescale 1ns/1ps
+
+module CMOS_TB();
+reg VIN;
+wire VOUT;
+CMOSINV OB(.vin(VIN),.vout(VOUT));
+initial
+begin
+    #5 $display("VIN \tVOUT");
+    #2 $monitor("%b\t\t%b",VIN,VOUT);
+end
+initial
+begin
+    #5 VIN=0;
+    #5 VIN=1;
+    #5 VIN=1'bZ;
+    #5 VIN=1'bX;
+end
+endmodule
+
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+OUTPUT:
+[Running] CMOS_TB.v
+VIN 	VOUT
+0		1
+1		0
+z		x
+x		x
+[Done] exit with code=0 in 0.181 seconds
