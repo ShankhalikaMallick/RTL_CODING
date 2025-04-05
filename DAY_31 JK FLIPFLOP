@@ -25,41 +25,14 @@ endmodule
 ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 TESTBENCH:
-//`include "SR.v"
-//`include "JK.v"
-//`include "D.v"
-//`include "T.v"
-
-//`include "D_TO_SR.v"
-// `include "SR_TO_D.v"
-// `include "SR_TO_JK.v"
-// `include "D_TO_T.v"
-// `include "T_TO_D.v"
-// `include "T_TO_SR.v"
-// `include "SR_TO_T.v"
-// `include "JK_TO_SR.v"
-// `include "D_TO_JK.v"
-
+`include "JK.v"
 `timescale 1ns/1ps
 
 module FF_TB();
 reg A,B, clk;
 wire Q, Qbar;
 
-// SR ob1(clk,A,B,Q,Qbar);
-// JK ob2(clk,A,B,Q,Qbar);
-// D_FF ob3(clk,B,Q,Qbar);
-// T_FF ob4(clk,B,Q,Qbar);
-
-// D_TO_SR ob5(clk,A,B,Q,Qbar);
-// SR_TO_D ob6(clk,B,Q,Qbar);
-// SR_TO_JK ob7(clk,A,B,Q,Qbar);
-// D_TO_T ob8(clk,B,Q,Qbar);
-// T_TO_D ob9(clk,B,Q,Qbar);
-// T_TO_SR ob10(clk,A,B,Q,Qbar);
-// SR_TO_T ob11(clk,B,Q,Qbar);
-// JK_TO_SR ob12(clk,A,B,Q,Qbar);
-// D_TO_JK ob13(clk,A,B,Q,Qbar);
+JK ob2(clk,A,B,Q,Qbar);
 
 always 
  #5 clk=~clk;
@@ -74,11 +47,8 @@ begin
 end
 initial
 begin
-    // #11 $display(" A \tB \tQ \tQbar");
-    // $monitor(" %b\t%b\t%b\t%b",A,B,Q,Qbar);  // for SR and JK FF
-
-    // #11 $display("B \tQ \tQbar");
-    // $monitor($time," %b\t%b\t%b",B,Q,Qbar);  // for D and TFF
+     #11 $display(" A \tB \tQ \tQbar");
+     $monitor(" %b\t%b\t%b\t%b",A,B,Q,Qbar);  // for SR and JK FF
     #70 $finish;
 end
 endmodule
