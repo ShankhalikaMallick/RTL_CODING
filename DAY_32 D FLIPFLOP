@@ -1,0 +1,52 @@
+RTL:
+`timescale 1ns / 1ps
+//Date : 06/04/2025
+//Name : Shankhalika Mallick
+
+// DAY-32 D FLIPFLOP
+
+module D_FF(clk,D,Q,Qbar);
+input D, clk;
+output reg Q=1'b0;
+output Qbar;
+assign Qbar=~Q;
+always @(negedge clk)
+begin
+  Q<=D;
+end
+endmodule
+
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+TESTBENCH:
+
+`include "D.v"
+`timescale 1ns/1ps
+
+module FF_TB();
+reg A,B, clk;
+wire Q, Qbar;
+
+ D_FF ob3(clk,B,Q,Qbar);
+
+always 
+ #5 clk=~clk;
+initial 
+begin
+    clk=1'b0;
+     A=0; B=0;
+    #15 A=1; B=0;
+    #15 A=0; B=1;
+    #15 A=0; B=0;
+    #15 A=1; B=1;
+end
+initial
+begin
+     #11 $display("B \tQ \tQbar");
+     $monitor($time," %b\t%b\t%b",B,Q,Qbar);  // for D and TFF
+    #70 $finish;
+end
+endmodule
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+OUTPUT:
