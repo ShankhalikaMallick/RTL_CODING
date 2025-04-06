@@ -24,6 +24,34 @@ endmodule
 
 TESTBENCH:
 
+`include "T.v"
+`timescale 1ns/1ps
+
+module FF_TB();
+reg A,B, clk;
+wire Q, Qbar;
+
+T_FF ob4(clk,B,Q,Qbar);
+
+always 
+ #5 clk=~clk;
+initial 
+begin
+    clk=1'b0;
+     A=0; B=0;
+    #15 A=1; B=0;
+    #15 A=0; B=1;
+    #15 A=0; B=0;
+    #15 A=1; B=1;
+end
+initial
+begin
+     #11 $display("B \tQ \tQbar");
+     $monitor($time," %b\t%b\t%b",B,Q,Qbar);  // for D and TFF
+    #70 $finish;
+end
+endmodule
+
 ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 OUTPUT:
