@@ -36,7 +36,51 @@ endmodule
 ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 TESTBENCH:
+`include "RAM_32BIT.v"
+`timescale 1ns/1ps
+
+module RAM_TB();
+reg clk,rst,wr,rd;
+reg [4:0] addr;
+reg [31:0] in;
+wire [31:0] out;
+integer i;
+RAM32 ob(clk,rst,wr,rd,addr,in,out);
+ always #5 clk=~clk;
+    initial clk=0;
+    initial 
+    begin 
+     rst = 1;
+     #10;
+     rst = 0;
+ 
+        for(i = 0; i<15;i=i+1)
+        begin 
+            wr = 1'b1;
+            in = $random(i);
+            addr = $random(i);
+            #10;
+            $display("wr=%b,data_in = %d ,addr = %d",wr,in,addr);
+            #10;
+            rd = 1'b1;
+            #10;
+            $display("rd=%b,data_in = %d ,addr = %d",wr,in,addr);
+        end
+    end 
+    initial 
+    begin 
+        #200;
+        $finish();
+    end 
+endmodule
 
 ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 OUTPUT:
+[Running] RAM_TB.v
+wr=1,data_in =  303379748 ,addr =  1
+rd=1,data_in =  303379748 ,addr =  1
+RAM_TB.v:35: $finish called at 200000 (1ps)
+[Done] exit with code=0 in 3.085 seconds
+
+
