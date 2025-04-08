@@ -1,0 +1,42 @@
+RTL:
+`timescale 1ns / 1ps
+//Date : 08/04/2025
+//Name : Shankhalika Mallick
+
+// DAY-34 32 BIT RAM
+
+module RAM32(clk,rst,wr,rd,addr,in,out);
+input wr,rd, clk, rst;
+input [4:0] addr;
+input [31:0] in;
+output reg [31:0] out;
+reg [31:0] ram[0:31];
+//[31:0] horizontal spaces each of dimesion 32 bits
+
+always @(posedge clk)
+begin
+    if (rst==1)
+    begin
+        ram[addr]<=32'b0;
+    end
+    else 
+    begin
+        if(wr==1)
+        begin
+            ram[addr]<=in;
+        end
+        if(rd==1)
+        begin
+            out<=ram[addr];
+        end
+    end
+end
+endmodule
+
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+TESTBENCH:
+
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+OUTPUT:
