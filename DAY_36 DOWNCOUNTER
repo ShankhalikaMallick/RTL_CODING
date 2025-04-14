@@ -1,0 +1,93 @@
+RTL:
+`timescale 1ns / 1ps
+//Date : 10/04/2025
+//Name : Shankhalika Mallick
+
+// DAY-36 4 BIT SYNCHRONOUS DOWNCOUNTER WITH SYNCHRONOUS RESET
+
+module DOWNCOUNT(clk,rst,count);
+input clk,rst;
+output reg [3:0]count;
+always @(negedge clk )
+begin
+    if(rst==1)
+    count<=4'b1111;
+    else 
+    begin
+        if(count==4'b0000)
+        count<=4'b1111;
+        else
+        count<=count-1;
+    end
+end
+endmodule
+
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+TESTBENCH:
+`timescale 1ns/1ps
+`include "DOWNCOUNT.v"
+
+module COUNTER_TB();
+reg clk, rst;
+wire [3:0] count;
+reg cntrl; // for UPDOWNCOUNTER ONLY
+
+DOWNCOUNT ob2(clk, rst, count); // Uncomment this if testing DOWNCOUNT
+
+initial begin
+    clk = 1'b0;
+    rst = 1'b1;
+    cntrl=1'b0;
+    #4 rst = 1'b0;
+    #5 rst = 1'b1; 
+    #10 rst = 1'b0; 
+    #30 cntrl=1'b1;
+    #30  cntrl=1'b0;
+    #30  cntrl=1'b1;
+    #30  rst = 1'b1; 
+    #20 rst = 1'b0; cntrl=1'b1;
+
+end
+
+always #5 clk = ~clk;
+
+initial begin
+    $monitor($time, "\t%b", count);
+    #250 $finish;
+end
+
+endmodule
+
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+OUTPUT:
+[Running] COUNT_TB.v
+                   0	1111
+                  20	1110
+                  30	1101
+                  40	1100
+                  50	1011
+                  60	1010
+                  70	1001
+                  80	1000
+                  90	0111
+                 100	0110
+                 110	0101
+                 120	0100
+                 130	0011
+                 140	1111
+                 160	1110
+                 170	1101
+                 180	1100
+                 190	1011
+                 200	1010
+                 210	1001
+                 220	1000
+                 230	0111
+                 240	0110
+COUNT_TB.v:34: $finish called at 250000 (1ps)
+                 250	0101
+[Done] exit with code=0 in 3.822 seconds
+
+
