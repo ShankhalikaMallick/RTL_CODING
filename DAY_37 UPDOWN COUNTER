@@ -1,0 +1,115 @@
+RTL:
+
+`timescale 1ns / 1ps
+//Date : 11/04/2025
+//Name : Shankhalika Mallick
+
+// DAY-37 4 BIT SYNCHRONOUS UPDOWN COUNTER
+
+/* 
+when cntrl is high perform upcounter, rst resets to 0000
+when cntrl is low perform upcounter, rst resets to 1111
+*/
+
+module UPDOWN(clk,rst,cntrl,count);
+input clk,rst,cntrl;
+output reg [3:0]count;
+always @(posedge clk)
+begin
+    if(cntrl==1'b1) //upcounter whn cntrl is high
+    begin
+          if(rst==1)
+            count<=4'b0;
+        else 
+        begin
+            if(count==4'b1111)
+            count<=4'b0;
+            else
+            count<=count+1;
+        end
+    end
+    else if(cntrl==1'b0) //downcounter whn cntrl is high
+    begin
+        if(rst==1)
+            count<=4'b1111;
+        else 
+        begin
+            if(count==4'b000)
+            count<=4'b1111;
+            else
+            count<=count-1;
+        end
+    end
+end
+endmodule
+
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+TESTBENCH:
+`timescale 1ns/1ps
+ `include "UPDOWN.v"
+
+module COUNTER_TB();
+reg clk, rst;
+wire [3:0] count;
+reg cntrl; // for UPDOWNCOUNTER ONLY
+
+UPDOWN ob3(clk,rst,cntrl,count);
+
+initial begin
+    clk = 1'b0;
+    rst = 1'b1;
+    cntrl=1'b0;
+    #4 rst = 1'b0;
+    #5 rst = 1'b1; 
+    #10 rst = 1'b0; 
+    #30 cntrl=1'b1;
+    #30  cntrl=1'b0;
+    #30  cntrl=1'b1;
+    #30  rst = 1'b1; 
+    #20 rst = 1'b0; cntrl=1'b1;
+
+end
+
+always #5 clk = ~clk;
+
+initial begin
+    $monitor($time, "\t%b", count);
+    #250 $finish;
+end
+
+endmodule
+
+
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+OUTPUT:
+[Running] COUNT_TB.v
+                   0	xxxx
+                  15	1111
+                  25	1110
+                  35	1101
+                  45	1100
+                  55	1101
+                  65	1110
+                  75	1111
+                  85	1110
+                  95	1101
+                 105	1100
+                 115	1101
+                 125	1110
+                 135	1111
+                 145	0000
+                 165	0001
+                 175	0010
+                 185	0011
+                 195	0100
+                 205	0101
+                 215	0110
+                 225	0111
+                 235	1000
+                 245	1001
+COUNT_TB.v:34: $finish called at 250000 (1ps)
+[Done] exit with code=0 in 0.646 seconds
+
+
