@@ -1,0 +1,83 @@
+RTL:
+`timescale 1ns / 1ps
+//Date : 12/04/2025
+//Name : Shankhalika Mallick
+
+// DAY-38 LEFT/RIGHT SHIFT REGISTER
+
+module LR_SHIFT(clk,ls,in,out);
+input ls,clk;
+input [7:0] in;
+output reg [7:0]out;
+initial
+#10 out=in;
+always@(posedge clk)
+begin
+    if(ls==1'b1)
+    // perform left shifting
+    out <=(out<<1);
+    else if(ls==1'b0)
+    // perform right shifting
+    out <=(out>>1); 
+    // zero is added in beginnning
+  
+end
+endmodule
+
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+TESTBENCH:
+`include "LR_SHIFT.v"
+`timescale 1ns/1ps
+
+module LR_TB ();
+reg clk,ls;
+reg [7:0] in;
+wire [7:0] out;
+LR_SHIFT OB(clk,ls,in,out);
+initial 
+begin
+    clk=1'b0;
+     in=8'b11111011;
+    #5  ls=1'b1;
+    #30 ls=1'b0;
+    #30  ls=1'b1;
+    #30 ls=1'b0; 
+end
+always
+#5 clk=~clk;
+initial
+begin
+    #5 $monitor($time,"\t %b\t%b",clk, out);
+    #100 $finish;
+end
+endmodule
+
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+OUTPUT:
+[Running] LR_TB.v
+                   5	 1	xxxxxxx0
+                  10	 0	11111011
+                  15	 1	11110110
+                  20	 0	11110110
+                  25	 1	11101100
+                  30	 0	11101100
+                  35	 1	01110110
+                  40	 0	01110110
+                  45	 1	00111011
+                  50	 0	00111011
+                  55	 1	00011101
+                  60	 0	00011101
+                  65	 1	00111010
+                  70	 0	00111010
+                  75	 1	01110100
+                  80	 0	01110100
+                  85	 1	11101000
+                  90	 0	11101000
+                  95	 1	01110100
+                 100	 0	01110100
+LR_TB.v:23: $finish called at 105000 (1ps)
+                 105	 1	00111010
+[Done] exit with code=0 in 0.725 seconds
+
