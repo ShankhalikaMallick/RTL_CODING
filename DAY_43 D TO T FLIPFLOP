@@ -1,0 +1,87 @@
+RTL:
+
+`timescale 1ns / 1ps
+//Date : 17/04/2025
+//Name : Shankhalika Mallick
+
+// DAY-43 T FLIPFLOP
+
+module T_FF(clk,T,Q,Qbar);
+input T, clk;
+output reg Q=1'b0;
+output Qbar;
+assign Qbar=~Q;
+always @(negedge clk)
+begin
+  case (T)
+  1'b0: Q<=Q;
+  1'b1: Q<=Qbar;
+  default: Q<=Q;
+  endcase
+end
+endmodule
+
+
+
+
+`timescale 1ns / 1ps
+//Date : 17/04/2025
+//Name : Shankhalika Mallick
+
+// DAY-43 D TO T FLIPFLOP
+
+`include "T.v"
+module T_TO_D(clk,D,Q,Qbar);
+input D, clk;
+output  Q,Qbar;
+wire T;
+T_FF ob(clk,D,Q,Qbar);
+assign T=D^Q;
+endmodule
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+TESTBENCH:
+ `include "T_TO_D.v"
+`timescale 1ns/1ps
+
+module FF_TB();
+reg A,B, clk;
+wire Q, Qbar;
+ T_TO_D ob9(clk,B,Q,Qbar);
+
+always 
+ #5 clk=~clk;
+initial 
+begin
+    clk=1'b0;
+     A=0; B=0;
+    #15 A=1; B=0;
+    #15 A=0; B=1;
+    #15 A=0; B=0;
+    #15 A=1; B=1;
+end
+initial
+begin
+     #11 $display("B \tQ \tQbar");
+     $monitor(" %b\t%b\t%b",B,Q,Qbar);  // for D and TFF
+    #70 $finish;
+end
+endmodule
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+OUTPUT:
+
+[Running] FF_TB.v
+B 	Q 	Qbar
+ 0	0	  1
+ 1	1	  0
+ 1	0	  1
+ 0	0	  1
+ 1	1	  0
+ 1	0	  1
+ 1	1	  0
+FF_TB.v:55: $finish called at 81000 (1ps)
+[Done] exit with code=0 in 0.438 seconds
+
