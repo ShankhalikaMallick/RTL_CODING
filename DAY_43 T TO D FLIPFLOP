@@ -28,7 +28,7 @@ endmodule
 //Date : 17/04/2025
 //Name : Shankhalika Mallick
 
-// DAY-43 D TO T FLIPFLOP
+// DAY-43 T TO D FLIPFLOP
 
 `include "T.v"
 module T_TO_D(clk,D,Q,Qbar);
