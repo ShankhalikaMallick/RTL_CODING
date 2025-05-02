@@ -1,10 +1,10 @@
 RTL:
 
 `timescale 1ns / 1ps
-//Date : 04/04/2025
+//Date : 16/04/2025
 //Name : Shankhalika Mallick
 
-// DAY-30 S-R FLIPFLOP
+// DAY-45 S-R FLIPFLOP
 
 module SR(clk,S,R,Q,Qbar);
 input S,R, clk;
@@ -82,13 +82,14 @@ OUTPUT:
 
 [Running] FF_TB.v
 B 	Q 	Qbar
- 0	0	1
- 1	0	1
- 1	1	0
- 0	1	0
- 1	1	0
- 1	0	1
- 1	1	0
+ 0	0	  1
+ 1	0	  1
+ 1	1	  0
+ 0	1  	0
+ 1	1  	0
+ 1	0	  1
+ 1	1  	0
 FF_TB.v:55: $finish called at 81000 (1ps)
-[Done] exit with code=0 in 1.671 seconds
+[Done] exit with code=0 in 2.067 seconds
+
 
