@@ -1,0 +1,61 @@
+RTL:
+`timescale 1ns / 1ps
+//Date : 24/04/2025
+//Name : Shankhalika Mallick
+
+// DAY-50 3 BIT EVEN PARITY GENERATOR
+
+module PARITY_GEN(
+    input a,b,c,
+    output p
+);
+assign p=a^b^c;   
+// ouput=1 when we have odd number of inputs as high
+endmodule
+
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+TESTBENCH:
+
+`timescale 1ns/1ps
+`include "PARITY_GEN.v"
+
+module PAR_TB ();
+reg a,b,c;
+//note: only declaring a variable i as reg is a 2 bit binary value
+integer i;
+wire p;
+PARITY_GEN OB(a,b,c,p);
+initial
+begin
+    for(i=0;i<8;i=i+1)
+    begin
+        #10; {a,b,c}=i;
+    end
+end 
+initial 
+begin
+    $display("a\tb\tc\tp");
+    $monitor("%d\t%d\t%d\t%d",a,b,c,p);
+    # 100 $finish;
+end
+endmodule
+
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+OUTPUT:
+
+[Running] PAR_TB.v
+a	b	c	p
+x	x	x	x
+0	0	0	0
+0	0	1	1
+0	1	0	1
+0	1	1	0
+1	0	0	1
+1	0	1	0
+1	1	0	0
+1	1	1	1
+PAR_TB.v:21: $finish called at 100000 (1ps)
+[Done] exit with code=0 in 0.328 seconds
+
