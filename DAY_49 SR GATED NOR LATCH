@@ -1,0 +1,70 @@
+RTL:
+`timescale 1ns / 1ps
+//Date : 23/04/2025
+//Name : Shankhalika Mallick
+
+// DAY-49 SR GATED NOR LATCH
+
+module SR_NOR(input en,s,r,output q,qbar);
+reg q;
+assign qbar=!q;
+always @(*)
+begin
+    if(en==0)
+    q<=q;
+    else if(en==1)
+    begin
+        if((s==0)&&(r==0))
+        q<=q;
+        else if(s==1)
+        q=1;
+        else if(r==1)
+        q=0;
+    end
+end  
+endmodule
+
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+TESTBENCH:
+
+`include "SR_NOR.v"
+`timescale 1ns/1ps
+
+module SR_NOR_TB();
+wire q,qbar;
+reg en,s,r;
+SR_NOR ob(en,s,r, q,qbar);
+initial
+begin
+    en=1; s=1;r=0;
+    #10; en=0;
+    #10; en=1; s=0;r=0;
+    #10; s=0;r=1;
+    #10; s=1;r=0;
+    #10; s=1;r=1;
+end
+initial
+begin
+    $display("en\ts\t r\t q\tqbar");
+    $monitor("%d\t%d\t%d\t%d\t%d", en,s,r,q,qbar);
+    #100; $finish;
+end
+endmodule
+
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+OUTPUT:
+
+[Running] SR_NOR_TB.v
+en	s	 r	 q	qbar
+1	  1	  0	  1	  0
+0  	1  	0  	1  	0
+1  	0  	0  	1  	0
+1	  0  	1  	0	  1
+1  	1  	0	  1	  0
+1  	1	  1	  1	  0
+SR_NOR_TB.v:21: $finish called at 100000 (1ps)
+[Done] exit with code=0 in 0.249 seconds
+
+
