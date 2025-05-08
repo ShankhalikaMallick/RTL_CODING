@@ -1,0 +1,118 @@
+RTL:
+
+`timescale 1ns / 1ps
+//Date : 26/04/2025
+//Name : Shankhalika Mallick
+
+// DAY-52 D-FLIPFLOP
+
+module D_FF(clk,rst,d,q);
+input clk,rst, d;
+output reg q;
+initial
+begin
+    q=0;
+end
+always @(posedge clk)
+begin 
+    //if (rst==0)
+    q<=d;
+end
+endmodule
+
+
+
+
+`timescale 1ns / 1ps
+//Date : 26/04/2025
+//Name : Shankhalika Mallick
+
+// DAY-52 4 BIT RING COUNTER
+`include "D_FF.v"
+
+module RING_COUNTER(clk,in,rst,w);
+input clk, in, rst;
+output [3:0]w;
+reg p;
+always @ (posedge clk)
+begin
+    if(rst==1)
+    p=in;
+    else 
+    begin
+        p=w[0];
+    end
+end
+D_FF ob3(clk,rst,p,w[3]);
+D_FF ob2(clk,rst,w[3],w[2]);
+D_FF ob1(clk,rst,w[2],w[1]);
+D_FF ob0(clk,rst,w[1],w[0]);
+endmodule
+
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+TESTBENCH:
+`include "RING_COUNTER.v"
+`timescale 1ns/1ps
+
+module RING_COUNTER_TB();
+reg clk,rst,in;
+wire [3:0]out;
+RING_COUNTER ob(clk,in,rst,out);
+initial begin
+    clk=0;
+    rst=1;
+    in=1;
+    #10; rst=0; in=0;
+    #65; rst=1; in=1;
+    #5; rst=0;
+    #50; rst=1; in=1;
+    #10; rst=0;
+end
+always
+begin
+    #5; clk=~clk;
+end
+initial 
+begin
+    $dumpfile("count.vcd");
+    $dumpvars(0,RING_COUNTER_TB);
+    $monitor($time,"\t%b\t%b",rst, out);
+    #200 $finish;
+end
+endmodule
+
+
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+OUTPUT:
+[Running] RING_COUNTER_TB.v
+VCD info: dumpfile count.vcd opened for output.
+                   0	1	0000
+                   5	1	1000
+                  10	0	1000
+                  15	0	1100
+                  25	0	0110
+                  35	0	0011
+                  45	0	1001
+                  55	0	1100
+                  65	0	0110
+                  75	1	0011
+                  80	0	0011
+                  85	0	1001
+                  95	0	1100
+                 105	0	0110
+                 115	0	0011
+                 125	0	1001
+                 130	1	1001
+                 135	1	1100
+                 140	0	1100
+                 145	0	0110
+                 155	0	0011
+                 165	0	1001
+                 175	0	1100
+                 185	0	0110
+                 195	0	0011
+RING_COUNTER_TB.v:27: $finish called at 200000 (1ps)
+[Done] exit with code=0 in 0.252 seconds
+
