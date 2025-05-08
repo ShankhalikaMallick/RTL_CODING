@@ -1,0 +1,83 @@
+RTL:
+`timescale 1ns / 1ps
+//Date : 27/04/2025
+//Name : Shankhalika Mallick
+
+// DAY-53 JOHNSON COUNTER
+
+module JOHNSON(rst,clk,q);
+input rst, clk;
+output reg [3:0] q;
+always @(posedge clk)
+begin
+if(rst==1)
+q=4'b0;
+else
+begin 
+q[3]<=!q[0];
+q[2]<=q[3];
+q[1]<=q[2];
+q[0]<=q[1];
+end
+end
+endmodule
+
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+TESTBENCH:
+`timescale 1ns/1ps
+`include "JOHNSON.v"
+
+module JH_TB(    );
+reg rst,clk;
+wire [3:0] q;
+JOHNSON ob(rst, clk, q );
+initial
+begin
+clk=1'b0;
+rst=1;
+#10 rst=0;
+#70 rst=1;
+#10 rst=0;
+end
+always
+begin
+#5; clk<=!clk;
+end
+initial
+begin
+$monitor($time,"\t%b",q);
+#200; $finish;
+end
+endmodule
+
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+OUTPUT:
+
+[Running] JH_TB.v
+                   0	xxxx
+                   5	0000
+                  15	1000
+                  25	1100
+                  35	1110
+                  45	1111
+                  55	0111
+                  65	0011
+                  75	0001
+                  85	0000
+                  95	1000
+                 105	1100
+                 115	1110
+                 125	1111
+                 135	0111
+                 145	0011
+                 155	0001
+                 165	0000
+                 175	1000
+                 185	1100
+                 195	1110
+JH_TB.v:23: $finish called at 200000 (1ps)
+[Done] exit with code=0 in 0.753 seconds
+
+
