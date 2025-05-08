@@ -1,0 +1,63 @@
+RTL:
+
+`timescale 1ns / 1ps
+//Date : 29/04/2025
+//Name : Shankhalika Mallick
+
+// DAY-55 4 BIT ODD PARITY GENERATOR
+
+module ODD_PAR(
+input a,b,c,d,
+output reg par
+    );
+    always @(a,b,c,d)
+    begin
+    par= !(a^b^c^d);
+    end
+endmodule
+
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+TESTBENCH:
+
+`timescale 1ns/1ps
+`include "ODD_PAR.v"
+
+module PARITY_TB();
+reg a,b,c,d;
+wire out;
+integer i;
+ODD_PAR ob(a,b,c,d,out);
+initial
+begin
+for (i=0;i<8;i=i+1)
+begin
+   #5;
+   {a,b,c,d}=i; 
+end
+end
+initial
+begin
+    $display("\ta\tb\tc\td\tout");
+    $monitor($time," %b\t%b\t%b\t%b\t%b",a,b,c,d,out);
+    #100; $finish;
+end
+endmodule
+
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+OUTPUT:
+[Running] PARITY_TB.v
+     a  b c	d	out
+ 0   x  x	x	x	x
+ 5   0	0	0	0	1
+10   0	0	0	1	0
+15   0	0	1	0	0
+20   0	0	1	1	1
+25   0	1	0	0	0
+30   0	1	0	1	1
+35   0	1	1	0	1
+40   0	1	1	1	0
+PARITY_TB.v:21: $finish called at 100000 (1ps)
+[Done] exit with code=0 in 0.145 seconds
+
