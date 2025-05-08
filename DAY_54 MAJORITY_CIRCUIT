@@ -1,0 +1,63 @@
+RTL:
+
+`timescale 1ns / 1ps
+//Date : 28/04/2025
+//Name : Shankhalika Mallick
+
+// DAY-54 3 BIT MAJORITY CIRCUIT
+
+module MAJORITY_CKT(
+input a,b,c,
+output reg maj
+    );
+    always @(a,b,c)
+    begin
+    maj= (a&b)|(b&c)|(c&a);
+    end
+endmodule
+
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+TESTBENCH:
+
+`timescale 1ns/1ps
+`include "MAJORITY_CKT.v"
+
+module MAJORITY_TB();
+reg a,b,c;
+wire out;
+integer i;
+MAJORITY_CKT ob(a,b,c,out);
+initial
+begin
+ for(i=0;i<8;i=i+1)
+ begin
+    #5; {a,b,c}=i;
+ end
+end
+initial
+begin
+    $display("a\tb\tc\tout");
+    $monitor("%d\t%d\t%d\t%d",a,b,c,out);
+    #50; $finish;
+end
+endmodule
+
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+OUTPUT:
+
+[Running] MAJORITY_TB.v
+a	b	c	out
+x	x	x	x
+0	0	0	0
+0	0	1	0
+0	1	0	0
+0	1	1	1
+1	0	0	0
+1	0	1	1
+1	1	0	1
+1	1	1	1
+MAJORITY_TB.v:20: $finish called at 50000 (1ps)
+[Done] exit with code=0 in 0.146 seconds
+
