@@ -1,0 +1,98 @@
+RTL:
+
+`timescale 1ns / 1ps
+//Date : 02/05/2025
+//Name : Shankhalika Mallick
+
+// DAY-58 4 BIT SERIAL IN SERIAL OUT REGISTER
+
+module SISO(clk,rst,in,op,out);
+    input clk,rst,in;
+    output op;
+    output reg [3:0] out;
+    assign op=out[3];
+    always @(posedge clk or posedge rst)
+    begin
+        if(rst==1)
+        out=4'b0;
+        else
+        begin
+            out[3]<=out[2];
+            out[2]<=out[1];
+            out[1]<=out[0];
+            out[0]<=in;                  
+        end
+    end    
+endmodule
+
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+TESTBENCH:
+
+`timescale 1ps/1ps
+`include "SISO.v"
+
+module SISO_TB();
+reg clk,rst,in;
+wire op;
+wire [3:0]out;
+SISO ob(clk,rst,in,op,out);
+initial 
+begin
+    clk=1'b0;
+    rst=1'b1;
+    in=1'b1;
+    #10; rst=0;
+    #20; in=1'b0;
+    #20; in=1'b1;
+    #30; in=1'b0;
+end
+initial 
+begin
+    $display("clk\trst\tin,\top");
+    $monitor("%b\t%b\t%b\t%b",clk,rst,in,op);
+    #120;
+    $finish;
+    
+end
+always
+begin
+    #5; clk=!clk;
+end
+endmodule
+
+
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+OUTPUT:
+
+[Running] SISO_TB.v
+clk	rst	in,	op
+0	1	1	0
+1	1	1	0
+0	0	1	0
+1	0	1	0
+0	0	1	0
+1	0	1	0
+0	0	0	0
+1	0	0	0
+0	0	0	0
+1	0	0	1
+0	0	1	1
+1	0	1	1
+0	0	1	1
+1	0	1	0
+0	0	1	0
+1	0	1	0
+0	0	0	0
+1	0	0	1
+0	0	0	1
+1	0	0	1
+0	0	0	1
+1	0	0	1
+0	0	0	1
+1	0	0	0
+SISO_TB.v:24: $finish called at 120000 (1ps)
+0	0	0	0
+[Done] exit with code=0 in 1.385 seconds
+
