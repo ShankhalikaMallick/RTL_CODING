@@ -1,0 +1,110 @@
+RTL:
+
+`timescale 1ns / 1ps
+//Date : 06/05/2025
+//Name : Shankhalika Mallick
+
+// DAY-62 4 BIT BIDIRECTIONAL SHIFT REGISTER
+
+module BIDIRECT(
+input clk, rst,load,rt_shift,
+        input [3:0] in,
+output reg [3:0] out);
+always  @(posedge clk)
+begin
+    if(rst==1)
+    begin
+        out=4'b0;
+    end
+    else if(load==1)
+    begin
+        out=in;
+    end
+    else if((rst==0)&&(load==0))
+    begin
+        if(rt_shift==1)
+        begin
+            out[0]<=out[1];
+            out[1]<=out[2];
+            out[2]<=out[3];
+            out[3]=0;
+        end
+        else if(rt_shift==0)
+        begin
+            out[3]<=out[2];
+            out[2]<=out[1];
+            out[1]<=out[0];
+            out[0]<=0;
+        end
+    end
+end
+endmodule
+
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+TESTBENCH:
+
+`timescale 1ns/1ps
+`include "BIDIRECT.v"
+
+module SHIFT_TB();
+reg clk,rst,load, rt_shift;
+reg [3:0] in;
+wire [3:0] out;
+BIDIRECT OB(clk, rst,load,rt_shift,in,out);
+initial 
+begin
+    clk=0;
+    rst=1;
+    load=0;
+    rt_shift=1;
+    in=4'b1011;
+    #10; rst=0; load=1;
+    #10; rst=0; load=0;
+    #30; rst=1;
+    #10; rst=0; load=1; rt_shift=0;
+    #10; rst=0; load=0; in=4'b1011;
+end
+initial
+begin 
+    $display("clk\t rst\t load \t rt_shift \t in \t out");
+    $monitor("%b\t\t%b\t%b\t%b\t%b\t%b",clk, rst,load,rt_shift,in,out) ;
+    #100;
+    $finish();
+end
+always
+begin
+ #5; clk=!clk;
+end
+endmodule
+
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+OUTPUT:
+
+[Running] SHIFT_TB.v
+clk  rst load   rt_shif  in  out
+  0  	1  	0      	1    	1011	xxxx
+  1  	1  	0      	1    	1011	0000
+  0  	0  	1      	1    	1011	0000
+  1  	0  	1  	    1    	1011	1011
+  0  	0  	0	      1    	1011	1011
+  1	  0  	0      	1    	1011	0101
+  0  	0  	0      	1    	1011	0101
+  1  	0  	0  	    1    	1011	0010
+  0  	0  	0      	1    	1011	0010
+  1  	0  	0      	1    	1011	0001
+  0  	1  	0      	1    	1011	0001
+  1  	1  	0      	1   	1011	0000
+  0  	0  	1	      0	    1011	0000
+  1	  0	  1	      0    	1011	1011
+  0	  0  	0      	0    	1011	1011
+  1  	0  	0      	0    	1011	0110
+  0  	0  	0      	0    	1011	0110
+  1  	0  	0      	0    	1011	1100
+  0  	0  	0      	0    	1011	1100
+  1  	0  	0  	    0    	1011	1000
+SHIFT_TB.v:27: $finish called at 100000 (1ps)
+  0  	0  	0      	0    	1011	1000
+[Done] exit with code=0 in 0.16 seconds
+
