@@ -1,0 +1,109 @@
+RTL:
+
+`timescale 1ns / 1ps
+//Date : 04/05/2025
+//Name : Shankhalika Mallick
+
+// DAY-60 PARALLEL IN SERIAL OUT REGISTER
+
+module PISO(clk, rst,in,load,out,op);
+input clk,rst,load;
+input [3:0] in;
+output op;
+output reg [3:0]out;
+assign op=out[3];
+always@(posedge clk)
+begin
+    if(rst==1)
+    out=4'b0;
+    else if(load==1)
+    out=in;
+    else if((rst==0)&&(load==0))
+    begin
+    out[3]<=out[2];
+    out[2]<=out[1];
+    out[1]<=out[0];
+    out[0]=0;
+    end
+end
+endmodule
+
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+TESTBENCH:
+
+`timescale 1ps/1ps
+`include "PISO.v"
+
+module PISO_TB();
+reg clk,rst,load;
+reg [3:0]in;
+wire op;
+wire [3:0]out;
+PISO ob(clk, rst,in,load,out,op);
+initial 
+begin
+    clk=1'b0;
+    rst=1'b1;
+    in=4'b1011;
+    #10; rst=0; in=4'b1011; load=1;
+    #10; load=0;
+    #30; rst=1; 
+    #10; rst=0; in=4'b0110; load=1;
+    #10; load=0;
+    #30; rst=1; 
+    #10; rst=0; in=4'b1110; load=1;
+    #10; load=0;
+end
+initial 
+begin
+    $dumpfile("PISO.vcd");
+    $dumpvars(0,PISO_TB);
+    $display("clk\top");
+    $monitor("%b\t%b",clk,op);
+    #120;
+    $finish;
+    
+end
+always
+begin
+    #5; clk=!clk;
+end
+endmodule
+
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+OUTPUT:
+
+[Running] PISO_TB.v
+VCD info: dumpfile PISO.vcd opened for output.
+clk	op
+0	x
+1	0
+0	0
+1	1
+0	1
+1	0
+0	0
+1	1
+0	1
+1	1
+0	1
+1	0
+0	0
+1	0
+0	0
+1	1
+0	1
+1	1
+0	1
+1	0
+0	0
+1	0
+0	0
+1	1
+PISO_TB.v:31: $finish called at 120000 (1ps)
+0	1
+[Done] exit with code=0 in 0.238 seconds
+
+
