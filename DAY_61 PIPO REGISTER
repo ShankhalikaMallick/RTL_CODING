@@ -1,0 +1,88 @@
+RTL:
+
+`timescale 1ns / 1ps
+//Date : 05/05/2025
+//Name : Shankhalika Mallick
+
+// DAY-61 4 BIT PARALLEL IN PARALLEL OUT REGISTER
+
+module PIPO(clk, rst,in,out);
+input clk,rst;
+input [3:0] in;
+output reg [3:0]out;
+always@(posedge clk or posedge rst)
+begin
+    if(rst==1)
+    out=4'b0;
+    else 
+    out=in;
+end
+endmodule
+
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+TESTBENCH:
+
+`timescale 1ps/1ps
+`include "PIPO.v"
+
+module PIPO_TB();
+reg clk,rst;
+reg [3:0] in;
+wire [3:0]out;
+PIPO ob(clk, rst,in,out);
+initial 
+begin
+    clk=1'b0;
+    rst=1'b1;
+    in=4'b1011;
+    #10; rst=0; in=4'b1110;
+    #10; rst=1; 
+    #10; rst=0; in=4'b0110;
+    #10; rst=1; 
+    #10; rst=0; in=4'b0011;
+    #10; rst=1; 
+    #10; rst=0; in=4'b0111;
+end
+initial 
+begin
+    $display("clk\trst\tin  \tout");
+    $monitor("%b\t%b\t%b\t%b",clk,rst,in,out);
+    #100;
+    $finish;
+end
+always
+begin
+    #5; clk=!clk;
+end
+endmodule
+
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+OUTPUT:
+[Running] PIPO_TB.v
+clk	rst	in  	out
+0  	1	  1011	0000
+1  	1  	1011	0000
+0  	0  	1110	0000
+1	  0	  1110	1110
+0	  1	  1110	0000
+1	  1	  1110	0000
+0	  0	  0110	0000
+1  	0	  0110	0110
+0  	1	  0110	0000
+1  	1	  0110	0000
+0  	0	  0011	0000
+1  	0	  0011	0011
+0  	1	  0011	0000
+1  	1  	0011	0000
+0  	0	  0111	0000
+1  	0	  0111	0111
+0  	0  	0111	0111
+1  	0	  0111	0111
+0  	0  	0111	0111
+1  	0	  0111	0111
+PIPO_TB.v:27: $finish called at 100000 (1ps)
+0  	0	  0111	0111
+[Done] exit with code=0 in 0.202 seconds
+
