@@ -1,0 +1,83 @@
+RTL:
+
+`timescale 1ns / 1ps
+//Date : 09/05/2025
+//Name : Shankhalika Mallick
+
+// DAY-65 8 BIT ADDER/ SUBSTRACTOR
+
+module ADD_SUB(rst,add,a,b,out);
+input rst,add;
+input [7:0] a,b;
+reg [7:0] bcom;
+output reg [8:0] out;
+always @(rst or add)
+begin
+    if(rst==1)
+    out=8'b0;
+    else
+    begin
+        if(add==1)
+        out=a+b;
+        else if(add==0)
+        begin
+        bcom=~b+1'b1;
+        out=a+bcom;
+        out={1'b0,out[7:0]};
+        end
+    end
+end
+endmodule
+
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+TESTBENCH:
+
+`timescale 1ns/1ps
+`include "ADD_SUB.v"
+ 
+module ADDSUB_TB();
+reg rst,add;
+reg [7:0] a,b;
+wire [8:0] out;
+ADD_SUB ob(rst,add,a,b,out);
+initial
+begin
+    rst=1;
+    #2; rst=0;  add=1'b1; a=8'b10110110; b=8'b01101001;
+    #10; add=1'b0;
+    #10; rst=0; add=1'b1; a=8'b10110110; b=8'b10100011;
+    #10; add=0;
+    #10; rst=0; add=1'b1; a=8'b11101010; b=8'b10111001;
+    #10; add=1'b0;
+    #5; rst=1'b1;
+    #5; rst=0; add=1'b1; a=8'b11010110; b=8'b01100011;
+    #10; add=1'b0;
+
+end
+initial
+begin
+    $monitor("rst=%b, add=%b, a=%d, b=%d, out=%d",rst,add,a,b,out);
+    #100;
+    $finish;
+end
+endmodule
+
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+OUTPUT:
+
+[Running] ADDSUB_TB.v
+rst=1, add=x, a=  x, b=  x, out=  0
+rst=0, add=1, a=182, b=105, out=287
+rst=0, add=0, a=182, b=105, out= 77
+rst=0, add=1, a=182, b=163, out=345
+rst=0, add=0, a=182, b=163, out= 19
+rst=0, add=1, a=234, b=185, out=419
+rst=0, add=0, a=234, b=185, out= 49
+rst=1, add=0, a=234, b=185, out=  0
+rst=0, add=1, a=214, b= 99, out=313
+rst=0, add=0, a=214, b= 99, out=115
+ADDSUB_TB.v:27: $finish called at 100000 (1ps)
+[Done] exit with code=0 in 0.162 seconds
+
