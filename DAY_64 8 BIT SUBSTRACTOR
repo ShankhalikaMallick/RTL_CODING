@@ -1,0 +1,70 @@
+RTL:
+
+`timescale 1ns / 1ps
+//Date : 08/05/2025
+//Name : Shankhalika Mallick
+
+// DAY-64 8 BIT SUBSTRACTOR USING 2'S COMPLEMENT METHOD
+
+module SUB(rst,a,b,op);
+input rst;
+input [7:0] a,b;
+output reg[7:0] op;
+reg [7:0]bcom;
+always @(a,b,rst)
+begin
+    if(rst==1)
+    op=0;
+    else 
+    begin
+    bcom= ~b+1;
+    op=a+b;
+    //note ! this is for logical not operation
+    // ~ this is for arithemetic not operation 
+    end
+end  
+endmodule
+
+
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+TESTBENCH:
+
+`timescale 1ns/1ps
+`include "SUB.v"
+
+module SUB_TB ();
+reg rst;
+reg [7:0] a,b;
+wire [7:0] op;
+SUB ob(rst,a,b,op);
+initial
+begin
+    rst=1;
+    #5 rst=0; a=8'b10111001; b=8'b00101101;
+    #10; b=8'b10110101;
+    #10; b=8'b10011001;
+    #10; a=8'b00101011; b=8'b10101010;
+    #10; b=8'b00100000;
+end
+initial 
+begin
+    $monitor("rst=%b,a=%b,b=%b,a-b=%b",rst,a,b,op);
+    #70;
+    $finish;    
+end
+endmodule
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+OUTPUT:
+
+[Running] SUB_TB.v
+rst=1,a=xxxxxxxx,b=xxxxxxxx,a-b=00000000
+rst=0,a=10111001,b=00101101,a-b=11100110
+rst=0,a=10111001,b=10110101,a-b=01101110
+rst=0,a=10111001,b=10011001,a-b=01010010
+rst=0,a=00101011,b=10101010,a-b=11010101
+rst=0,a=00101011,b=00100000,a-b=01001011
+SUB_TB.v:22: $finish called at 70000 (1ps)
+[Done] exit with code=0 in 1.885 seconds
+
