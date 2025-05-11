@@ -4,7 +4,7 @@ RTL:
 //Date : 07/05/2025
 //Name : Shankhalika Mallick
 
-// DAY-63 PSEUDO RANDOM BIT SEQUENCE GENERATOR
+// DAY-63 RANDOM BIT SEQUENCE GENERATOR
 
 module RANDOM_BIT(rst, clk, rand);
 input rst, clk;
@@ -19,7 +19,7 @@ begin
     end
     else
     begin
-        seed<={seed[6:0],seed[5],seed[7]};
+        seed<={seed[6:0],seed[5]^seed[7]};
         rand=seed;
     end
 end
@@ -64,11 +64,13 @@ OUTPUT:
 xxxxxxxx
 00000000
 10100010
-10001011
-00101101
-10110110
-11011011
-01101101
+01000100
+10001000
+00010001
+00100010
+01000101
 RANDOM_TB.v:23: $finish called at 70000 (1ps)
-[Done] exit with code=0 in 0.391 seconds
+[Done] exit with code=0 in 0.325 seconds
+
+
 
