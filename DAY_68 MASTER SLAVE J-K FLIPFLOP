@@ -1,0 +1,102 @@
+RTL:
+        `timescale 1ns / 1ps
+//Date : 12/05/2025
+//Name : Shankhalika Mallick
+
+// DAY-68 MASTER SLAVE J-K FLIPFLOP
+
+module MS_JK(clk,ina,inb,qs,qsbar);
+input clk,ina,inb;
+output reg qs;
+output qsbar;
+reg qm;
+wire qmbar;
+wire j,k;
+assign qmbar=~qm;
+assign qsbar=~qs;
+assign    j=(qsbar & ina);
+assign    k=(qs & inb);
+always @(ina,inb,clk)
+begin
+        qs=1'b1;
+if(clk==1)
+begin
+        if ((j==1)&&(k==1))
+        qm<=qmbar;
+        else if ((j==0)&&(k==0))
+        qm<=qm;
+        else if(j==1)
+        qm=1;
+        else if(k==1)
+        qm=0;  
+end 
+else if(clk==0)
+begin
+        if ((qm==1)&&(qmbar==1))
+        qs<=qsbar;
+        else if ((qm==0)&&(qmbar==0))
+        qs<=qs;
+        else if(qm==1)
+        qs=1;
+        else if(qmbar==1)
+        qs=0; 
+end 
+end
+endmodule
+
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+TESTBENCH:
+`timescale 1ps/1ps
+`include "MS_JK.v"
+
+module JK_TB();
+reg clk,ina,inb;
+wire qs,qsbar;
+MS_JK ob(clk,ina,inb,qs,qsbar);
+initial begin
+    clk=1'b1;
+     ina=1'b1; inb=1'b0;
+    #20; ina=1'b0; inb=1'b0;
+    #20; ina=1'b0; inb=1'b1;
+    #20; ina=1'b1; inb=1'b1;
+    #20; $finish;
+end
+always
+begin
+    #5; clk=~clk;
+end
+initial
+begin
+  $display ("clk  j \t k \tqs \tqbar");
+ $monitor("%b\t%b\t%b\t%b\t%b",clk,ina,inb,qs,qsbar);
+end
+endmodule
+
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+OUTPUT:
+
+[Running] JK_TB.v
+clk  j 	 k 	qs 	qbar
+1  	1  	0  	1  	0
+0	  1  	0  	1  	0
+1  	1  	0	  1  	0
+0  	1  	0  	1  	0
+1	  0  	0  	1  	0
+0	  0  	0  	1  	0
+1  	0  	0  	1  	0
+0  	0  	0  	1  	0
+1  	0  	1  	1  	0
+0	  0	  1  	1  	0
+1	  0  	1  	1  	0
+0	  0  	1  	0  	1
+1	  1  	1  	1  	0
+0	  1  	1  	0  	1
+1	  1	  1	  1	  0
+0  	1  	1  	1  	0
+JK_TB.v:14: $finish called at 80000 (1ps)
+1	  1	  1	  1  	0
+[Done] exit with code=0 in 0.566 seconds
+
+
