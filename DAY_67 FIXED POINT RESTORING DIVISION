@@ -1,0 +1,75 @@
+RTL:
+
+`timescale 1ns / 1ps
+//Date : 11/05/2025
+//Name : Shankhalika Mallick
+
+// DAY-67 FIXED POINT RESTORING DIVISION
+
+module DIVISION(divisor, dividend, rem,quo);
+parameter N=8;
+input [N-1:0] divisor;
+input [N-1:0] dividend;
+output reg [N-1:0] rem;
+output reg [N-1:0] quo;
+integer count=N-1;
+reg [N-1:0] cal;
+always @(divisor or dividend)
+begin #2
+    while (count>=0)
+    begin
+        cal={rem,dividend [count]};
+        if(cal >= divisor)
+            quo [count] =1;
+        else if ( cal < divisor)
+            quo [count] =0;           
+        rem= cal-(divisor*quo[count]);
+        count= count-1;
+    end
+end
+always @(divisor or dividend)
+begin
+    rem=0;
+    quo=0;
+    cal=0;
+    count=N-1;
+end
+endmodule
+
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+TESTBENCH:
+
+`timescale 1ns/1ps
+`include "DIVISION.v"
+
+module DIVIDE_TB();
+reg [7:0] divisor, dividend;
+wire [7:0] rem, quo;
+DIVISION ob(divisor, dividend, rem,quo);
+initial 
+begin
+    divisor = 8'b00000110; dividend = 8'b 01101100;
+     #5; $display ($time," divisor=%b\tdividend=%b\tquotient=%b\tremainder=%b",divisor,dividend,quo,rem);
+    #10; divisor = 8'b01000110; dividend = 8'b 11101100;
+     #5; $display ($time," divisor=%b\tdividend=%b\tquotient=%b\tremainder=%b",divisor,dividend,quo,rem);
+    #10; divisor = 8'b00100110; dividend = 8'b 11101110;
+     #5; $display ($time," divisor=%b\tdividend=%b\tquotient=%b\tremainder=%b",divisor,dividend,quo,rem);
+    #10; divisor = 8'b00010110; dividend = 8'b 01101111;
+     #5; $display ($time," divisor=%b\tdividend=%b\tquotient=%b\tremainder=%b",divisor,dividend,quo,rem);
+    #10; $finish;
+end
+endmodule
+
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+OUTPUT:
+
+[Running] DIVIDE_TB.v
+                   5 divisor=00000110	dividend=01101100	quotient=00010010	remainder=00000000
+                  20 divisor=01000110	dividend=11101100	quotient=00000011	remainder=00011010
+                  35 divisor=00100110	dividend=11101110	quotient=00000110	remainder=00001010
+                  50 divisor=00010110	dividend=01101111	quotient=00000101	remainder=00000001
+DIVIDE_TB.v:18: $finish called at 60000 (1ps)
+[Done] exit with code=0 in 0.166 seconds
+
