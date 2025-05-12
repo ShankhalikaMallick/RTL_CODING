@@ -1,0 +1,72 @@
+RTL:
+
+`timescale 1ns / 1ps
+//Date : 13/05/2025
+//Name : Shankhalika Mallick
+
+// DAY-69 POSITIVE EDGE DETECTOR
+
+module EDGE(clk,sig,edg);
+input clk,sig;
+output reg edg;
+reg sig_del;
+always @(posedge clk or negedge clk)
+begin
+    sig_del<=sig;
+    if (sig== ~sig_del)
+    edg=1; 
+    else 
+    edg=0;
+end
+endmodule
+
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+TESTBENCH:
+
+`timescale 1ps/1ps
+`include "EDGE.v"
+
+module ED_TB();
+reg clk,sig;
+wire edg;
+EDGE ob(clk,sig,edg);
+initial begin
+    clk=1'b0;
+    $display ("sig edge");
+    $monitor("%b \t %b", sig, edg);
+    sig=0;
+    #5; sig=1;
+    #10; sig=0;
+    #5; sig=1;
+    #25; sig=0;
+    #10; $finish;
+end
+always 
+begin
+#2; clk =~clk;
+end
+endmodule
+
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+OUTPUT:
+
+[Running] ED_TB.v
+sig edge
+0 	 0
+1 	 0
+1 	 1
+1 	 0
+0 	 0
+0 	 1
+0 	 0
+1 	 1
+1 	 0
+0 	 0
+0 	 1
+0 	 0
+ED_TB.v:17: $finish called at 55000 (1ps)
+[Done] exit with code=0 in 0.143 seconds
+
+
