@@ -1,0 +1,117 @@
+RTL:
+
+`timescale 1ns / 1ps
+//Date : 14/05/2025
+//Name : Shankhalika Mallick
+
+// DAY-70 (B) FINITE STATE MACHINE
+// MOORE OVERLAPPING 1010 SEQUENCE DETECTOR
+
+module MOORE_O(clk, rst, in, out);
+input in,clk,rst;
+output reg out;
+parameter S0=3'b000;
+parameter S1=3'b001;
+parameter S2=3'b010;
+parameter S3=3'b011;
+parameter S4=3'b100;
+reg [2:0] state, next_state;
+// bit by bit inputs are given . we have to check if it matches sequence 1010
+
+// to check for reset condition: for resetting state
+always @(posedge clk)
+begin
+    if (rst==1)
+    begin
+        out=0;
+        state=S0;
+    end
+    else
+    state <= next_state; 
+end
+
+// to determine next state based on present state and input
+always @(*)
+begin
+    if(rst==0)
+    begin
+    case (state)
+    S0: next_state= in? S1: S0;
+    S1: next_state= in? S1: S2;
+    S2: next_state= in? S3: S0;
+    S3: next_state= in? S1: S4;
+    S4: next_state= in? S3: S2; 
+    endcase
+    end  
+end   
+
+// to determine output based on present state only
+always @(*)
+begin
+    if(state==S4)
+        out=1;
+        else out=0;
+end
+endmodule
+
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+TESTBENCH:
+
+`timescale 1ps/1ps
+ `include "MOORE_O.v"
+
+module FSM_TB();
+reg clk, rst, in;
+wire out;
+MOORE_O ob2( clk, rst, in, out);
+
+initial begin
+    clk=1'b0;
+    rst=1'b1;
+    #6; rst=1'b0; 
+    #5; in=1;
+    #10; in=0;
+    #10; in=1;
+    #10; in=0;
+    #10; in=1; 
+    #10; in=0;
+    #10; in=1;
+    #10; in=0;
+end
+initial begin
+    $dumpfile("fsm.vcd");
+    $dumpvars(0,FSM_TB);
+    $monitor($time," %b\t%b", in,out);
+        #100; $finish;
+end
+always 
+begin
+    #5; clk=~clk;
+end
+endmodule
+
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+OUTPUT:
+[Running] FSM_TB.v
+VCD info: dumpfile fsm.vcd opened for output.
+                   0 x	x
+                   5 x	0
+                  11 1	0
+                  21 0	0
+                  31 1	0
+                  41 0	0
+                  45 0	1
+                  51 1	1
+                  55 1	0
+                  61 0	0
+                  65 0	1
+                  71 1	1
+                  75 1	0
+                  81 0	0
+                  85 0	1
+                  95 0	0
+FSM_TB.v:33: $finish called at 100000 (1ps)
+[Done] exit with code=0 in 0.213 seconds
+
