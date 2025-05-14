@@ -1,0 +1,107 @@
+RTL:
+
+`timescale 1ns / 1ps
+//Date : 14/05/2025
+//Name : Shankhalika Mallick
+
+// DAY-70 (C) FINITE STATE MACHINE
+// MEALY NON OVERLAPPING 1010 SEQUENCE DETECTOR
+
+module MEALY_NO( clk, rst, in, out);
+input clk, rst, in;
+output reg out;
+reg [2:0] state, next_state;
+parameter A=2'b00;
+parameter B=2'b01;
+parameter C=2'b10;
+parameter D=2'b11;
+
+//update state before calculation;
+always @(posedge clk)
+begin
+    if(rst==1)
+    state=A;
+    else 
+    state<= next_state;   
+end
+
+// updating next state and output
+always @(*)
+begin
+    case (state)
+        A: next_state= in? B:A;
+        B: next_state= in? B:C;
+        C: next_state= in? D:A;
+        D: next_state= in? B:A;
+    endcase   
+end
+
+// updating output
+always @(*)
+begin
+    if( (state==D) && (in==0)) 
+    out=1;
+    else 
+    out=0; 
+end
+endmodule
+
+
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+TESTBENCH:
+
+`timescale 1ps/1ps
+`include "MEALY_NO.v" 
+
+module FSM_TB();
+reg clk, rst, in;
+wire out;
+MEALY_NO ob3 (clk,rst,in,out);
+
+initial begin
+    clk=1'b0;
+    rst=1'b1;
+    #6; rst=1'b0; 
+    #5; in=1;
+    #10; in=0;
+    #10; in=1;
+    #10; in=0;
+    #10; in=1; 
+    #10; in=0;
+    #10; in=1;
+    #10; in=0;
+end
+initial begin
+    $dumpfile("fsm.vcd");
+    $dumpvars(0,FSM_TB);
+    $monitor($time," %b\t%b", in,out);
+        #100; $finish;
+end
+always 
+begin
+    #5; clk=~clk;
+end
+endmodule
+
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+OUTPUT:
+[Running] FSM_TB.v
+VCD info: dumpfile fsm.vcd opened for output.
+                   0 x	x
+                   5 x	0
+                  11 1	0
+                  21 0	0
+                  31 1	0
+                  41 0	1
+                  45 0	0
+                  51 1	0
+                  61 0	0
+                  71 1	0
+                  81 0	1
+                  85 0	0
+FSM_TB.v:33: $finish called at 100000 (1ps)
+[Done] exit with code=0 in 0.271 seconds
+
+
