@@ -1,0 +1,63 @@
+RTL:
+
+`timescale 1ns / 1ps
+//Date : 17/05/2025
+//Name : Shankhalika Mallick
+
+// DAY-73 D LATCH USING 2:1 MUX
+
+module D_LATCH(clk, d, out);
+input clk, d;
+output reg out;
+always @(posedge clk)
+begin
+    case (d)
+    0: out=0;
+    1: out=1;
+    endcase
+end
+endmodule
+
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+TESTBENCH:
+
+`timescale 1ps/1ps
+`include "D.v"
+
+module D_TB();
+reg clk, d;
+wire out;
+D_LATCH ob(clk, d, out);
+initial begin
+    $monitor("out=%b",out);
+    clk=1'b0;
+    #10; d=1'b0;
+    $display("d=%b", d);
+    #10; d=1'b1;
+    $display("d=%b", d);
+    #10; d=1'b0;
+    $display("d=%b", d);
+    #50; $finish;
+end
+always 
+begin
+    #5; clk=~clk;
+end
+endmodule
+
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+OUTPUT:.
+
+[Running] D_TB.v
+out=x
+d=0
+out=0
+d=1
+out=1
+d=0
+out=0
+D_TB.v:17: $finish called at 80000 (1ps)
+[Done] exit with code=0 in 0.499 seconds
+
