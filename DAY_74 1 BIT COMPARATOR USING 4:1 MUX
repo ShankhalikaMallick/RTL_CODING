@@ -1,0 +1,65 @@
+RTL:
+
+`timescale 1ns / 1ps
+//Date : 18/05/2025
+//Name : Shankhalika Mallick
+
+// DAY-74 1 BIT COMPARATOR USING 4:1 MUX
+
+module COMP(a,b,gt,lt,eq);
+input a,b;
+output reg gt, lt, eq;
+wire [1:0]sel;
+assign sel={a,b};
+always @(*)
+begin
+case(sel)
+2'b00: begin gt=0; lt=0; eq=1; end
+2'b01: begin gt=0; lt=1; eq=0; end
+2'b10: begin gt=1; lt=0; eq=0; end
+2'b11: begin gt=0; lt=0; eq=1; end
+endcase
+end
+endmodule
+
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+TESTBENCH:
+
+`include "COMP.v"
+`timescale 1ps/1ps
+
+module COMP_TB();
+reg a,b;
+wire gt, lt, eq;
+COMP ob(a,b,gt,lt,eq);
+initial begin
+    $monitor("gt=%b lt=%b eq=%b",gt,lt,eq);
+    a=1'b0; b=1'b0;
+    $display("a=%b b=%b", a,b);
+    #5; a=1'b0; b=1'b1;
+    $display("a=%b b=%b", a,b);
+    #5; a=1'b1; b=1'b0;
+    $display("a=%b b=%b", a,b);
+    #5; a=1'b1; b=1'b1;
+    $display("a=%b b=%b", a,b);
+    #30; $finish;
+end
+endmodule
+
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+OUTPUT:
+
+[Running] COMP_TB.v
+a=0 b=0
+gt=0 lt=0 eq=1
+a=0 b=1
+gt=0 lt=1 eq=0
+a=1 b=0
+gt=1 lt=0 eq=0
+a=1 b=1
+gt=0 lt=0 eq=1
+COMP_TB.v:18: $finish called at 45 (1ps)
+[Done] exit with code=0 in 0.614 seconds
+
