@@ -1,0 +1,64 @@
+RTL:
+
+`timescale 1ns / 1ps
+//Date : 19/05/2025
+//Name : Shankhalika Mallick
+
+// DAY-75 SHIFT OPERATIONS USING 4:1 MUX
+// PERFORM  OPERATIONS DEPENDING IN THE INPUT TO MUX
+// SHIFT RIGHT, SHIFT LEFT, SIGNED SHIFT, ROTATE SHIFT
+
+module SHIFT(sel, data, amt, out);
+input [1:0]sel;
+input [4:0] data;
+input [1:0] amt;
+output reg [4:0] out;
+always @(*)
+begin
+    case (sel)
+    2'b00: out= data>>amt;
+    2'b01: out= data<<amt;
+    2'b10: out= $signed(data)>>>amt;
+    2'b11: out= ((data<<amt)|(data>>(3'b100-amt)));
+    endcase
+end
+endmodule
+
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+TESTBENCH:
+
+`timescale 1ps/1ps
+`include "SHIFT.v"
+
+module SHIFT_TB();
+reg [1:0]sel;
+reg [4:0] data;
+reg [1:0] amt;
+wire [4:0] out;
+SHIFT ob(sel, data, amt, out);
+initial
+begin
+    $monitor("%b, %b",sel, out);
+    data=5'b10110;
+    amt=2'b10;
+    sel=2'b00; 
+    #10; sel=2'b01;
+    #10; sel=2'b10;
+    #10; sel=2'b11;
+    #20; $finish;
+end
+endmodule
+
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+OUTPUT:
+
+[Running] SHIFT_TB.v
+00, 00101
+01, 11000
+10, 11101
+11, 11101
+SHIFT_TB.v:19: $finish called at 50000 (1ps)
+[Done] exit with code=0 in 0.252 seconds
+
