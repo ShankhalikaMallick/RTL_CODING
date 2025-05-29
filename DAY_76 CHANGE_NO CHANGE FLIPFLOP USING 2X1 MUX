@@ -1,0 +1,71 @@
+RTL:
+
+`timescale 1ns / 1ps
+//Date : 20/05/2025
+//Name : Shankhalika Mallick
+
+// DAY-76 CHANGE_NO CHANGE FLIPFLOP USING 2X1 MUX
+
+module FF(clk, sel, rst, d, out);
+input clk, sel, rst,d;
+output reg out;
+reg q;
+always @(posedge clk)
+begin
+    if(rst==1)
+    q=0;
+    else
+    q=d;
+    case(sel)
+    0: out=out;
+    1: out=q;
+    endcase
+end
+endmodule
+
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+TESTBENCH:
+
+`timescale 1ns/1ps
+`include "FF.v"
+
+module FF_TB();
+reg clk, sel, rst,d;
+wire out;
+FF ob(clk, sel, rst, d, out);
+initial begin
+    $monitor("rst=%b, d=%b, sel=%b, out=%b",rst, d, sel,out);
+    clk=1'b0;
+    rst=1'b1;
+    #10 rst=1'b0;
+    sel=1'b1;
+    d=1'b1;
+    #10; sel=1'b0;
+    #10; sel=1'b1; d=1'b0;
+    #10; sel=1'b1; d=1'b1;
+    #10; rst=1'b1;
+    #20; $finish;
+end
+always 
+#5 clk=~clk;
+endmodule
+
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+OUTPUT:
+
+[Running] FF_TB.v
+rst=1, d=x, sel=x, out=x
+rst=0, d=1, sel=1, out=x
+rst=0, d=1, sel=1, out=1
+rst=0, d=1, sel=0, out=1
+rst=0, d=0, sel=1, out=1
+rst=0, d=0, sel=1, out=0
+rst=0, d=1, sel=1, out=0
+rst=0, d=1, sel=1, out=1
+rst=1, d=1, sel=1, out=1
+rst=1, d=1, sel=1, out=0
+FF_TB.v:19: $finish called at 70000 (1ps)
+[Done] exit with code=0 in 0.227 seconds
+
