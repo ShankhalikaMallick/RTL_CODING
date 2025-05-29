@@ -1,0 +1,91 @@
+RTL:
+
+`timescale 1ns / 1ps
+//Date : 21/05/2025
+//Name : Shankhalika Mallick
+
+// DAY-77 FREQUENCY DIVIDER USING ODD NUMBERS
+
+module FREQ(clk, rst, out);
+input clk, rst;
+output reg out;
+reg [2:0] count;
+// DIVIDE BY COUNT 5
+always @(posedge clk)
+begin
+    if(rst==1)
+    begin
+        out=1'b0;
+        count=3'b0;
+    end
+    else
+    begin
+        if(count==4)
+        begin
+            count=0;
+            out<=~out;
+        end
+        else
+        begin
+            count=count+1;
+        end        
+    end  
+end
+endmodule
+
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+TESTBENCH:
+
+`timescale 1ns/1ps
+`include "FREQ.v"
+
+module FREQ_TB();
+reg clk, rst;
+wire out;
+FREQ ob(clk, rst, out);
+initial begin
+    $monitor("%b, %b", clk, out);
+    $dumpfile("t.vcd");
+    $dumpvars(0,FREQ_TB);
+    clk=1'b0;
+    rst=1'b1;
+    #10; rst=1'b0;
+    #100; $finish;
+end
+always 
+#5 clk=~clk;
+endmodule
+
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+OUTPUT:
+
+[Running] FREQ_TB.v
+VCD info: dumpfile t.vcd opened for output.
+0, x
+1, 0
+0, 0
+1, 0
+0, 0
+1, 0
+0, 0
+1, 0
+0, 0
+1, 0
+0, 0
+1, 1
+0, 1
+1, 1
+0, 1
+1, 1
+0, 1
+1, 1
+0, 1
+1, 1
+0, 1
+1, 0
+FREQ_TB.v:15: $finish called at 110000 (1ps)
+0, 0
+[Done] exit with code=0 in 0.393 seconds
+
