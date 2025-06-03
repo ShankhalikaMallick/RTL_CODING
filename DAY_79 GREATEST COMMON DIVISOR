@@ -1,0 +1,129 @@
+RTL:
+
+`timescale 1ns / 1ps
+//Date : 24/05/2025
+//Name : Shankhalika Mallick
+
+// DAY-79 GREATEST COMMON DIVISOR
+
+module GCD(clk, rst, a, b, gcd, done);
+input clk, rst;
+input [7:0]a;
+input [7:0]b;
+output reg [7:0] gcd;
+output reg done;
+
+parameter IDLE  =3'b000 ;
+parameter COMPARE  =3'b001 ;
+parameter SUBX  =3'b010 ;
+parameter SUBY  =3'b011 ;
+parameter DONE  =3'b100 ;
+
+reg [7:0] x,y;
+reg [2:0] state;
+
+always @(posedge clk, posedge rst )
+begin
+    if(rst==1)
+    begin
+        state=IDLE;
+        done=0;
+        gcd=0;        
+    end
+    else
+    begin
+    case (state)
+
+        IDLE:
+        begin
+            done <=0;
+            x<=a;
+            y<=b;
+            state <= COMPARE;
+        end
+
+        COMPARE:
+        begin
+            if(x==y)
+            begin
+                gcd <=x;
+                state <= DONE;
+            end
+            else if(x>y)
+            begin
+                state <=SUBX;                
+            end
+            else if(x<y)
+            begin
+                state <= SUBY;                
+            end
+        end
+
+        SUBX:
+        begin
+            x<=x-y;  
+            state <= COMPARE;          
+        end
+
+        SUBY:
+        begin
+            y<=y-x;
+            state <= COMPARE;
+        end
+
+        DONE:
+        begin
+            done<=1;
+            state<= IDLE;  
+        end
+    endcase
+    end  
+end
+endmodule      
+
+
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+TESTBENCH:
+
+`timescale 1ns/1ps
+`include  "GCD.v"
+
+module GCD_TB();
+reg clk, rst; 
+reg [7:0] a,b;
+wire [7:0] gcd;
+wire done;
+GCD ob(clk, rst, a, b, gcd, done);
+initial begin
+    $monitor("a=%b, b=%b, rst=%b, gcd=%b, done=%b", a,b,rst,gcd,done);
+    clk=1'b0;
+    rst=1'b1;
+    a=8'd5; b=8'd10;
+    #10; rst=1'b0;
+    #50; a = 8'd56; b = 8'd98;
+    #200; $finish;
+end
+always 
+begin
+#5; clk=~clk;
+end
+endmodule
+
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+OUTPUT:
+
+[Running] GCD_TB.v
+a=00000101, b=00001010, rst=1, gcd=00000000, done=0
+a=00000101, b=00001010, rst=0, gcd=00000000, done=0
+a=00000101, b=00001010, rst=0, gcd=00000101, done=0
+a=00000101, b=00001010, rst=0, gcd=00000101, done=1
+a=00111000, b=01100010, rst=0, gcd=00000101, done=1
+a=00111000, b=01100010, rst=0, gcd=00000101, done=0
+a=00111000, b=01100010, rst=0, gcd=00001110, done=0
+a=00111000, b=01100010, rst=0, gcd=00001110, done=1
+a=00111000, b=01100010, rst=0, gcd=00001110, done=0
+GCD_TB.v:17: $finish called at 260000 (1ps)
+[Done] exit with code=0 in 0.208 seconds
+
