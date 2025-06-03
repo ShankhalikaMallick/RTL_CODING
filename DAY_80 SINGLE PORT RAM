@@ -1,0 +1,79 @@
+RTL:
+
+`timescale 1ns / 1ps
+//Date : 25/05/2025
+//Name : Shankhalika Mallick
+
+// DAY-80 SINGLE PORT RAM
+// 8 BIT DATA, 2 BIT ADDRESS LINE
+
+module RAM(clk, en, addr, din, dout);
+input clk,en;
+input [1:0] addr;
+input [7:0] din;
+output reg [7:0] dout;
+reg [7:0] mem [3:0];
+always @(posedge clk)
+begin
+    if(en==1)
+    begin
+        mem[addr] <=din;
+    end
+    else if(en==0)
+    begin
+        dout <=mem[addr];
+    end
+end
+endmodule
+
+
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+TESTBENCH:
+
+`timescale 1ns/1ps
+`include "RAM.v"
+
+module RAM_TB();
+reg clk, en;
+reg [1:0] addr;
+reg [7:0] din;
+wire [7:0] dout;
+RAM ob(clk, en, addr, din, dout);
+initial
+begin
+    clk=1'b0;
+    en=1'b1; //load into memory
+    addr=2'b00; din=8'd25;
+    #10; addr=2'b01; din= 8'd12;
+     #10; addr=2'b10; din= 8'd15;
+     #10; addr=2'b11; din= 8'd20;
+     #10; en=1'b0;
+     #12; addr=2'b00;
+     #5; $display("address=%d, dataout=%d",addr,dout);
+     #5; addr=2'b01;
+     #5; $display("address=%d, dataout=%d",addr,dout);
+     #5; addr=2'b10;
+     #5; $display("address=%d, dataout=%d",addr,dout);
+     #5; addr=2'b11;
+     #5; $display("address=%d, dataout=%d",addr,dout);
+     #10; $finish;
+end
+always 
+begin
+    #5; clk=~clk;
+end
+endmodule
+
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+OUTPUT:
+
+[Running] RAM_TB.v
+address=0, dataout= 25
+address=1, dataout= 12
+address=2, dataout= 15
+address=3, dataout= 20
+RAM_TB.v:27: $finish called at 97000 (1ps)
+[Done] exit with code=0 in 0.188 seconds
+
