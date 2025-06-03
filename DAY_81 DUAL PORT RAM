@@ -1,0 +1,93 @@
+RTL:
+
+`timescale 1ns / 1ps
+//Date : 26/05/2025
+//Name : Shankhalika Mallick
+
+// DAY-81 DUAL PORT RAM
+
+module DUALRAM(clk, en, rdaddr, wraddr, din, dout);
+input clk, en;
+input [1:0] rdaddr, wraddr;
+input [7:0] din;
+output reg [7:0] dout;
+reg [7:0] mem [3:0];
+always @(posedge clk)
+begin
+    if(en==1)
+    begin
+        //write to memory
+        mem [wraddr] <= din;
+    end
+    else if(en==0)
+    begin
+        //read from memory
+        dout= mem[rdaddr];
+    end
+end
+endmodule
+
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+TESTBENCH:
+
+`timescale 1ps/1ps
+`include "DUALRAM.v"
+
+module DUALRAM_TB();
+reg clk, en;
+reg [1:0] rdaddr, wraddr;
+reg [7:0] din;
+wire[7:0] dout;
+DUALRAM ob(clk, en, rdaddr, wraddr, din, dout);
+always 
+begin
+#5; clk=~clk;
+end
+initial
+begin
+    clk=1'b0;
+    en=1'b1;
+    #12; wraddr=2'b00; din=8'd25;
+    #5; $display(" write to address=%d, datain=%d",wraddr,din);
+    
+    #5; wraddr=2'b01; din=8'd20;
+    #5; $display(" write to address=%d, datain=%d",wraddr,din);
+    
+    #5; wraddr=2'b10; din=8'd10;
+    #5; $display(" write to address=%d, datain=%d",wraddr,din);
+    
+    #5; en=1'b0; rdaddr=2'b01;
+    #5; $display(" read from address=%d, dataout=%d",rdaddr,dout);
+    
+    #5; en=1'b1; wraddr=2'b11; din=8'd15;
+    #5; $display("write to address=%d, datain=%d",wraddr,din);
+
+    #5; en=1'b0; rdaddr=2'b10;
+    #5; $display(" read from address=%d, dataout=%d",rdaddr,dout);
+
+    #5; en=1'b0; rdaddr=2'b00;
+    #5; $display(" read from address=%d, dataout=%d",rdaddr,dout);
+    
+    #5; rdaddr=2'b11;
+    #5; $display(" read from address=%d, dataout=%d",rdaddr,dout);
+    #20; $finish;
+end
+endmodule
+
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+OUTPUT:
+
+[Running] DUALRAM_TB.v
+ write to address=0, datain= 25
+ write to address=1, datain= 20
+ write to address=2, datain= 10
+ read from address=1, dataout= 20
+ write to address=3, datain= 15
+ read from address=2, dataout= 10
+ read from address=0, dataout= 25
+ read from address=3, dataout= 15
+DUALRAM_TB.v:36: $finish called at 107000 (1ps)
+[Done] exit with code=0 in 0.16 seconds
+
