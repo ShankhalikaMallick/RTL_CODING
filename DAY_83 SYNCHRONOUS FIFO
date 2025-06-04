@@ -1,0 +1,104 @@
+RTL:
+
+`timescale 1ns / 1ps
+//Date : 28/05/2025
+//Name : Shankhalika Mallick
+
+// DAY-83 SYNCHRONOUS FIFO
+
+module FIFO ( clk, rst, rden, wren, din, full, empty, dout);
+parameter FIFO_DEPTH = 16;
+parameter DATA_WIDTH = 8;
+parameter ADDRESS = 4;
+
+input clk, rst;
+input [DATA_WIDTH-1:0] din;
+input rden, wren;
+
+output reg [DATA_WIDTH-1:0] dout;
+output full, empty;
+
+reg [DATA_WIDTH-1:0] mem [FIFO_DEPTH-1:0];
+reg [ADDRESS-1:0] rdaddr, wraddr;
+
+assign full= ((wraddr-rdaddr)==FIFO_DEPTH?1:0);
+assign empty= (wraddr==rdaddr?1:0);
+
+always @ (posedge clk)
+begin
+    if(rst==1)
+    begin
+        rdaddr <=0;
+        wraddr <=0;
+        dout <=0;
+    end
+    else if ((rden==1)&&(empty!=1))
+    begin
+        dout <= mem [rdaddr];
+        rdaddr= rdaddr+1'b1;
+    end
+    else if ((wren==1)&&(full!=1))
+    begin
+        mem[wraddr] <=din;
+        wraddr= wraddr+1'b1;
+    end    
+end
+endmodule
+
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+TESTBENCH:
+
+`timescale 1ns/1ps
+`include "FIFO.v"
+
+module FIFO_TB();
+reg clk, rst, rden, wren;
+reg [7:0] din;
+wire full,empty;
+wire [7:0] dout;
+FIFO ob( clk, rst, rden, wren, din, full, empty, dout);
+
+initial begin
+    $monitor("rst=%b, rden=%b, wren=%b, full=%b, empty=%b, dout=%d",rst, rden, wren, full, empty, dout);
+    clk=1'b0;
+    rst=1'b1;
+    #12; rst=1'b0; rden=1'b0; wren=1'b1; 
+        din=8'd25;
+    #10; din=8'd22;
+    #10; din=8'd20;
+    #10; din=8'd18;
+    #10; din=8'd15;
+    #10; din=8'd12;
+    #10; din=8'd10;
+    #10; din=8'd5;
+    #10; wren=1'b0; rden=1'b1; 
+    #100; $finish;
+end
+always 
+begin
+    #5; clk=~clk;
+end
+endmodule
+
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+OUTPUT:
+
+[Running] FIFO_TB.v
+rst=1, rden=x, wren=x, full=x, empty=x, dout=  x
+rst=1, rden=x, wren=x, full=0, empty=1, dout=  0
+rst=0, rden=0, wren=1, full=0, empty=1, dout=  0
+rst=0, rden=0, wren=1, full=0, empty=0, dout=  0
+rst=0, rden=1, wren=0, full=0, empty=0, dout=  0
+rst=0, rden=1, wren=0, full=0, empty=0, dout= 25
+rst=0, rden=1, wren=0, full=0, empty=0, dout= 22
+rst=0, rden=1, wren=0, full=0, empty=0, dout= 20
+rst=0, rden=1, wren=0, full=0, empty=0, dout= 18
+rst=0, rden=1, wren=0, full=0, empty=0, dout= 15
+rst=0, rden=1, wren=0, full=0, empty=0, dout= 12
+rst=0, rden=1, wren=0, full=0, empty=0, dout= 10
+rst=0, rden=1, wren=0, full=0, empty=1, dout=  5
+FIFO_TB.v:25: $finish called at 192000 (1ps)
+[Done] exit with code=0 in 0.19 seconds
+
