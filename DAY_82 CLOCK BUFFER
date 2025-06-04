@@ -1,0 +1,60 @@
+RTL:
+
+`timescale 1ns / 1ps
+//Date : 27/05/2025
+//Name : Shankhalika Mallick
+
+// DAY-82 CLOCK BUFFER
+
+module BUFF(clk, clk1, clk2, clk3);
+input clk;
+output reg clk1, clk2, clk3;
+always @(clk)
+begin
+    clk1 <= clk;
+    clk2 <= clk;
+    clk3 <= clk;
+end
+endmodule
+
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+TESTBENCH:
+
+`timescale 1ns/1ps
+`include "BUFF.v"
+
+module BUFFTB();
+reg clk;
+wire clk1, clk2, clk3;
+BUFF ob(clk, clk1, clk2, clk3);
+initial begin
+    clk=1'b0;
+    $monitor ("clk1=%b, clk2=%b, clk3=%b", clk1, clk2, clk3);
+    #50; $finish;
+end
+always 
+begin
+    #5; clk=~clk;
+end
+endmodule
+
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+OUTPUT:
+
+[Running] BUFFTB.v
+clk1=0, clk2=0, clk3=0
+clk1=1, clk2=1, clk3=1
+clk1=0, clk2=0, clk3=0
+clk1=1, clk2=1, clk3=1
+clk1=0, clk2=0, clk3=0
+clk1=1, clk2=1, clk3=1
+clk1=0, clk2=0, clk3=0
+clk1=1, clk2=1, clk3=1
+clk1=0, clk2=0, clk3=0
+clk1=1, clk2=1, clk3=1
+BUFFTB.v:11: $finish called at 50000 (1ps)
+clk1=0, clk2=0, clk3=0
+[Done] exit with code=0 in 0.222 seconds
+
