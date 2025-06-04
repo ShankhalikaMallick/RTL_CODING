@@ -1,0 +1,65 @@
+RTL:
+
+`timescale 1ns / 1ps
+//Date : 29/05/2025
+//Name : Shankhalika Mallick
+
+// DAY-84 FIXED PRIORITY ARBITER
+
+module ARBITER(din,dout);
+// Note this is a combinational circuit
+input [3:0] din;
+output reg [3:0] dout;
+always @(*)
+begin
+    casex (din)
+    // Note that we need to use casex here
+    4'b1???: dout=4'b1000; // highest priority
+    4'b01??: dout=4'b0100;
+    4'b001?: dout=4'b0010;
+    4'b0001: dout=4'b0001; // lowest priority
+    endcase
+end
+endmodule
+
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+TESTBENCH:
+
+`timescale 1ns/1ps
+`include "ARBITER.v"
+
+module ARBITER_TB();
+reg [3:0] din;
+wire [3:0] dout;
+ARBITER ob(din,dout);
+initial begin
+    $monitor("din=%b, dout=%b", din, dout);
+    din= 4'b0100;
+    #10; din=4'b0110;
+    #10; din=4'b1110;
+    #10; din=4'b0110;
+    #10; din=4'b0101;
+    #10; din=4'b0011;
+    #10; din=4'b0001;
+    #20;$finish;
+
+end
+endmodule
+
+
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+OUTPUT:
+
+[Running] ARBITER_TB.v
+din=0100, dout=0100
+din=0110, dout=0100
+din=1110, dout=1000
+din=0110, dout=0100
+din=0101, dout=0100
+din=0011, dout=0010
+din=0001, dout=0001
+ARBITER_TB.v:17: $finish called at 80000 (1ps)
+[Done] exit with code=0 in 0.187 seconds
+
