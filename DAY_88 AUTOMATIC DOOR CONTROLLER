@@ -1,0 +1,106 @@
+RTL:
+
+`timescale 1ns / 1ps
+//Date : 02/06/2025
+//Name : Shankhalika Mallick
+
+// DAY-88 FSM BASED AUTOMATIC DOOR CONTROLLER
+
+module DOOR(clk, rst, sensor, man, dout);
+input clk, rst, sensor,man;
+// sensor to detect automatic movement
+// man to open or close manually
+// key: open=1, closed=0
+output reg dout;
+
+reg [1:0] state, next_state;
+parameter CLOSE = 2'b00;
+parameter OPENING = 2'b01;
+parameter OPEN = 2'b10;
+parameter CLOSING = 2'b11;
+
+always @(posedge clk)
+begin
+    if(rst==1)
+        state=CLOSE;
+    else
+        state <=next_state;
+end
+
+always @(*)
+begin
+    next_state = state;
+    case (state)
+    CLOSE:
+    begin
+        dout=0;
+        if((sensor==1)||(man==1))
+        next_state=OPENING;
+    end
+    OPENING: 
+    begin
+        dout=1;
+        next_state=OPEN;
+    end
+    OPEN:
+    begin
+        dout=1;
+        if ((sensor==0)&&(man==0))
+        next_state=CLOSING; 
+    end
+    CLOSING:
+    begin
+        dout=0;
+        next_state=CLOSE;
+    end
+    endcase
+end
+endmodule
+
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+TESTBENCH:
+
+`timescale 1ps/1ps
+`include "DOOR.v"
+
+module DOOR_TB();
+reg clk, rst, sensor,man;
+wire dout;
+DOOR ob(clk, rst, sensor, man, dout);
+initial
+begin
+    $monitor ("sensor=%b, manual=%b, door=%b",sensor, man, dout);
+    clk=1'b0;
+    rst=1'b1;
+    #10; rst=0; sensor=1'b0;
+    #10; man=1'b1;
+    #20; man=1'b0; 
+    #20; sensor=1'b1;
+    #10; sensor=1'b0;
+    #20; $finish;
+end
+always 
+begin
+    #5;clk=~clk;
+end
+endmodule
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+OUTPUT:
+
+[Running] DOOR_TB.v
+sensor=x, manual=x, door=x
+sensor=x, manual=x, door=0
+sensor=0, manual=x, door=0
+sensor=0, manual=1, door=0
+sensor=0, manual=1, door=1
+sensor=0, manual=0, door=1
+sensor=0, manual=0, door=0
+sensor=1, manual=0, door=0
+sensor=1, manual=0, door=1
+sensor=0, manual=0, door=1
+sensor=0, manual=0, door=0
+DOOR_TB.v:18: $finish called at 90000 (1ps)
+[Done] exit with code=0 in 0.235 seconds
+
