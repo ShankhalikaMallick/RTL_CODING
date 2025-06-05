@@ -1,0 +1,90 @@
+RTL:
+
+`timescale 1ns / 1ps
+//Date : 31/05/2025
+//Name : Shankhalika Mallick
+
+// DAY-86 MEMORY 1MB 32 BITS
+
+module MEM(clk, rst, wren, addr, din, dout);
+input clk, rst, wren;
+input [19:0] addr;
+input [31:0] din;
+output reg [31:0] dout ;
+
+reg [31:0] arr [0:1048575];
+integer i;
+always @(posedge clk)
+begin
+    if (rst==1)
+    begin
+        dout=0;
+        for(i=0; i<1048576; i=i+1)
+        arr [i]=32'b0;
+    end
+    else 
+    begin
+        if(wren==1)
+        arr[addr] <= din;
+        else if(wren==0)
+        dout <= arr[addr];
+    end
+end
+endmodule
+
+
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+TESTBENCH:
+
+`timescale 1ns/1ps
+`include "MEM.v"
+
+module MEM_TB();
+reg clk, rst, wren;
+reg [19:0] addr;
+reg [31:0] din;
+wire [31:0] dout;
+MEM ob(clk, rst, wren, addr, din, dout);
+initial begin
+    $monitor("rst=%b, addr=%h, dout=%h", rst, addr, dout);
+    clk=1'b0;
+    rst=1'b1;
+    #12; rst=1'b0; wren=1'b1;
+    addr= 20'b0; 
+    din=32'h5A5A5A5A;
+    #10; 
+    addr= 20'h0001; 
+    din=32'h5B7A5BCA;
+    #10; 
+    addr= 20'h0002; 
+    din=32'h2C7A681A;
+    #12; wren=1'b0;
+    addr= 20'b0; 
+    #10; addr= 20'h0001;
+    #10; addr= 20'h0002;
+    #20; $finish;
+end
+always 
+#5 clk=~clk;
+endmodule
+
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+OUTPUT:
+
+[Running] MEM_TB.v
+rst=1, addr=xxxxx, dout=xxxxxxxx
+rst=1, addr=xxxxx, dout=00000000
+rst=0, addr=00000, dout=00000000
+rst=0, addr=00001, dout=00000000
+rst=0, addr=00002, dout=00000000
+rst=0, addr=00000, dout=00000000
+rst=0, addr=00000, dout=5a5a5a5a
+rst=0, addr=00001, dout=5a5a5a5a
+rst=0, addr=00001, dout=5b7a5bca
+rst=0, addr=00002, dout=5b7a5bca
+rst=0, addr=00002, dout=2c7a681a
+MEM_TB.v:27: $finish called at 84000 (1ps)
+[Done] exit with code=0 in 0.851 seconds
+
