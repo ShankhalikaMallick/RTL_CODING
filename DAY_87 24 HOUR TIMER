@@ -1,0 +1,1081 @@
+RTL:
+
+`timescale 1ns / 1ps
+//Date : 01/06/2025
+//Name : Shankhalika Mallick
+
+// DAY-87 24 HOUR TIMER
+
+module TIMER(clk, rst, hr, min, sec, finish);
+input clk, rst; 
+output reg [4:0] hr;
+output reg [5:0] min;
+output reg [5:0] sec;
+output reg finish;
+always @ (clk)
+begin
+    if (rst==1)
+    begin
+        hr=5'b0;
+        min=6'b0;
+        sec=6'b0;
+        finish=1'b0;
+    end
+    else
+    begin
+        sec=sec+1'b1;
+        if(sec==6'd60)
+        begin
+            sec=0;
+            min=min+1'b1;
+            if(min==6'd60)
+            begin
+                min=0;
+                hr=hr+1'b1;
+                if(hr==5'd24)
+                begin
+                    hr=0; min=0; sec=0; finish=1'b1;
+                end
+            end
+        end
+    end
+end
+endmodule
+
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+TESTBENCH:
+
+`timescale 1ps/1ps
+`include "TIMER.v"
+
+module TIMER_TB();
+reg clk, rst; 
+wire [4:0] hr;
+wire [5:0] min;
+wire [5:0] sec;
+wire finish;
+TIMER ob(clk, rst, hr, min, sec, finish);
+initial begin
+    $monitor("rst=%b, finish=%b, time=%d:%d:%d", rst, finish, hr,min,sec);
+    clk=1'b0;
+    rst=1'b1;
+    #5; rst=1'b0;
+    #500; $finish;
+end
+always
+begin 
+#0.5; clk=~clk;
+end
+endmodule
+
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+OUTPUT:
+
+[Running] TIMER_TB.v
+rst=1, finish=0, time= 0: 0: 0
+rst=0, finish=0, time= 0: 0: 1
+rst=0, finish=0, time= 0: 0: 2
+rst=0, finish=0, time= 0: 0: 3
+rst=0, finish=0, time= 0: 0: 4
+rst=0, finish=0, time= 0: 0: 5
+rst=0, finish=0, time= 0: 0: 6
+rst=0, finish=0, time= 0: 0: 7
+rst=0, finish=0, time= 0: 0: 8
+rst=0, finish=0, time= 0: 0: 9
+rst=0, finish=0, time= 0: 0:10
+rst=0, finish=0, time= 0: 0:11
+rst=0, finish=0, time= 0: 0:12
+rst=0, finish=0, time= 0: 0:13
+rst=0, finish=0, time= 0: 0:14
+rst=0, finish=0, time= 0: 0:15
+rst=0, finish=0, time= 0: 0:16
+rst=0, finish=0, time= 0: 0:17
+rst=0, finish=0, time= 0: 0:18
+rst=0, finish=0, time= 0: 0:19
+rst=0, finish=0, time= 0: 0:20
+rst=0, finish=0, time= 0: 0:21
+rst=0, finish=0, time= 0: 0:22
+rst=0, finish=0, time= 0: 0:23
+rst=0, finish=0, time= 0: 0:24
+rst=0, finish=0, time= 0: 0:25
+rst=0, finish=0, time= 0: 0:26
+rst=0, finish=0, time= 0: 0:27
+rst=0, finish=0, time= 0: 0:28
+rst=0, finish=0, time= 0: 0:29
+rst=0, finish=0, time= 0: 0:30
+rst=0, finish=0, time= 0: 0:31
+rst=0, finish=0, time= 0: 0:32
+rst=0, finish=0, time= 0: 0:33
+rst=0, finish=0, time= 0: 0:34
+rst=0, finish=0, time= 0: 0:35
+rst=0, finish=0, time= 0: 0:36
+rst=0, finish=0, time= 0: 0:37
+rst=0, finish=0, time= 0: 0:38
+rst=0, finish=0, time= 0: 0:39
+rst=0, finish=0, time= 0: 0:40
+rst=0, finish=0, time= 0: 0:41
+rst=0, finish=0, time= 0: 0:42
+rst=0, finish=0, time= 0: 0:43
+rst=0, finish=0, time= 0: 0:44
+rst=0, finish=0, time= 0: 0:45
+rst=0, finish=0, time= 0: 0:46
+rst=0, finish=0, time= 0: 0:47
+rst=0, finish=0, time= 0: 0:48
+rst=0, finish=0, time= 0: 0:49
+rst=0, finish=0, time= 0: 0:50
+rst=0, finish=0, time= 0: 0:51
+rst=0, finish=0, time= 0: 0:52
+rst=0, finish=0, time= 0: 0:53
+rst=0, finish=0, time= 0: 0:54
+rst=0, finish=0, time= 0: 0:55
+rst=0, finish=0, time= 0: 0:56
+rst=0, finish=0, time= 0: 0:57
+rst=0, finish=0, time= 0: 0:58
+rst=0, finish=0, time= 0: 0:59
+rst=0, finish=0, time= 0: 1: 0
+rst=0, finish=0, time= 0: 1: 1
+rst=0, finish=0, time= 0: 1: 2
+rst=0, finish=0, time= 0: 1: 3
+rst=0, finish=0, time= 0: 1: 4
+rst=0, finish=0, time= 0: 1: 5
+rst=0, finish=0, time= 0: 1: 6
+rst=0, finish=0, time= 0: 1: 7
+rst=0, finish=0, time= 0: 1: 8
+rst=0, finish=0, time= 0: 1: 9
+rst=0, finish=0, time= 0: 1:10
+rst=0, finish=0, time= 0: 1:11
+rst=0, finish=0, time= 0: 1:12
+rst=0, finish=0, time= 0: 1:13
+rst=0, finish=0, time= 0: 1:14
+rst=0, finish=0, time= 0: 1:15
+rst=0, finish=0, time= 0: 1:16
+rst=0, finish=0, time= 0: 1:17
+rst=0, finish=0, time= 0: 1:18
+rst=0, finish=0, time= 0: 1:19
+rst=0, finish=0, time= 0: 1:20
+rst=0, finish=0, time= 0: 1:21
+rst=0, finish=0, time= 0: 1:22
+rst=0, finish=0, time= 0: 1:23
+rst=0, finish=0, time= 0: 1:24
+rst=0, finish=0, time= 0: 1:25
+rst=0, finish=0, time= 0: 1:26
+rst=0, finish=0, time= 0: 1:27
+rst=0, finish=0, time= 0: 1:28
+rst=0, finish=0, time= 0: 1:29
+rst=0, finish=0, time= 0: 1:30
+rst=0, finish=0, time= 0: 1:31
+rst=0, finish=0, time= 0: 1:32
+rst=0, finish=0, time= 0: 1:33
+rst=0, finish=0, time= 0: 1:34
+rst=0, finish=0, time= 0: 1:35
+rst=0, finish=0, time= 0: 1:36
+rst=0, finish=0, time= 0: 1:37
+rst=0, finish=0, time= 0: 1:38
+rst=0, finish=0, time= 0: 1:39
+rst=0, finish=0, time= 0: 1:40
+rst=0, finish=0, time= 0: 1:41
+rst=0, finish=0, time= 0: 1:42
+rst=0, finish=0, time= 0: 1:43
+rst=0, finish=0, time= 0: 1:44
+rst=0, finish=0, time= 0: 1:45
+rst=0, finish=0, time= 0: 1:46
+rst=0, finish=0, time= 0: 1:47
+rst=0, finish=0, time= 0: 1:48
+rst=0, finish=0, time= 0: 1:49
+rst=0, finish=0, time= 0: 1:50
+rst=0, finish=0, time= 0: 1:51
+rst=0, finish=0, time= 0: 1:52
+rst=0, finish=0, time= 0: 1:53
+rst=0, finish=0, time= 0: 1:54
+rst=0, finish=0, time= 0: 1:55
+rst=0, finish=0, time= 0: 1:56
+rst=0, finish=0, time= 0: 1:57
+rst=0, finish=0, time= 0: 1:58
+rst=0, finish=0, time= 0: 1:59
+rst=0, finish=0, time= 0: 2: 0
+rst=0, finish=0, time= 0: 2: 1
+rst=0, finish=0, time= 0: 2: 2
+rst=0, finish=0, time= 0: 2: 3
+rst=0, finish=0, time= 0: 2: 4
+rst=0, finish=0, time= 0: 2: 5
+rst=0, finish=0, time= 0: 2: 6
+rst=0, finish=0, time= 0: 2: 7
+rst=0, finish=0, time= 0: 2: 8
+rst=0, finish=0, time= 0: 2: 9
+rst=0, finish=0, time= 0: 2:10
+rst=0, finish=0, time= 0: 2:11
+rst=0, finish=0, time= 0: 2:12
+rst=0, finish=0, time= 0: 2:13
+rst=0, finish=0, time= 0: 2:14
+rst=0, finish=0, time= 0: 2:15
+rst=0, finish=0, time= 0: 2:16
+rst=0, finish=0, time= 0: 2:17
+rst=0, finish=0, time= 0: 2:18
+rst=0, finish=0, time= 0: 2:19
+rst=0, finish=0, time= 0: 2:20
+rst=0, finish=0, time= 0: 2:21
+rst=0, finish=0, time= 0: 2:22
+rst=0, finish=0, time= 0: 2:23
+rst=0, finish=0, time= 0: 2:24
+rst=0, finish=0, time= 0: 2:25
+rst=0, finish=0, time= 0: 2:26
+rst=0, finish=0, time= 0: 2:27
+rst=0, finish=0, time= 0: 2:28
+rst=0, finish=0, time= 0: 2:29
+rst=0, finish=0, time= 0: 2:30
+rst=0, finish=0, time= 0: 2:31
+rst=0, finish=0, time= 0: 2:32
+rst=0, finish=0, time= 0: 2:33
+rst=0, finish=0, time= 0: 2:34
+rst=0, finish=0, time= 0: 2:35
+rst=0, finish=0, time= 0: 2:36
+rst=0, finish=0, time= 0: 2:37
+rst=0, finish=0, time= 0: 2:38
+rst=0, finish=0, time= 0: 2:39
+rst=0, finish=0, time= 0: 2:40
+rst=0, finish=0, time= 0: 2:41
+rst=0, finish=0, time= 0: 2:42
+rst=0, finish=0, time= 0: 2:43
+rst=0, finish=0, time= 0: 2:44
+rst=0, finish=0, time= 0: 2:45
+rst=0, finish=0, time= 0: 2:46
+rst=0, finish=0, time= 0: 2:47
+rst=0, finish=0, time= 0: 2:48
+rst=0, finish=0, time= 0: 2:49
+rst=0, finish=0, time= 0: 2:50
+rst=0, finish=0, time= 0: 2:51
+rst=0, finish=0, time= 0: 2:52
+rst=0, finish=0, time= 0: 2:53
+rst=0, finish=0, time= 0: 2:54
+rst=0, finish=0, time= 0: 2:55
+rst=0, finish=0, time= 0: 2:56
+rst=0, finish=0, time= 0: 2:57
+rst=0, finish=0, time= 0: 2:58
+rst=0, finish=0, time= 0: 2:59
+rst=0, finish=0, time= 0: 3: 0
+rst=0, finish=0, time= 0: 3: 1
+rst=0, finish=0, time= 0: 3: 2
+rst=0, finish=0, time= 0: 3: 3
+rst=0, finish=0, time= 0: 3: 4
+rst=0, finish=0, time= 0: 3: 5
+rst=0, finish=0, time= 0: 3: 6
+rst=0, finish=0, time= 0: 3: 7
+rst=0, finish=0, time= 0: 3: 8
+rst=0, finish=0, time= 0: 3: 9
+rst=0, finish=0, time= 0: 3:10
+rst=0, finish=0, time= 0: 3:11
+rst=0, finish=0, time= 0: 3:12
+rst=0, finish=0, time= 0: 3:13
+rst=0, finish=0, time= 0: 3:14
+rst=0, finish=0, time= 0: 3:15
+rst=0, finish=0, time= 0: 3:16
+rst=0, finish=0, time= 0: 3:17
+rst=0, finish=0, time= 0: 3:18
+rst=0, finish=0, time= 0: 3:19
+rst=0, finish=0, time= 0: 3:20
+rst=0, finish=0, time= 0: 3:21
+rst=0, finish=0, time= 0: 3:22
+rst=0, finish=0, time= 0: 3:23
+rst=0, finish=0, time= 0: 3:24
+rst=0, finish=0, time= 0: 3:25
+rst=0, finish=0, time= 0: 3:26
+rst=0, finish=0, time= 0: 3:27
+rst=0, finish=0, time= 0: 3:28
+rst=0, finish=0, time= 0: 3:29
+rst=0, finish=0, time= 0: 3:30
+rst=0, finish=0, time= 0: 3:31
+rst=0, finish=0, time= 0: 3:32
+rst=0, finish=0, time= 0: 3:33
+rst=0, finish=0, time= 0: 3:34
+rst=0, finish=0, time= 0: 3:35
+rst=0, finish=0, time= 0: 3:36
+rst=0, finish=0, time= 0: 3:37
+rst=0, finish=0, time= 0: 3:38
+rst=0, finish=0, time= 0: 3:39
+rst=0, finish=0, time= 0: 3:40
+rst=0, finish=0, time= 0: 3:41
+rst=0, finish=0, time= 0: 3:42
+rst=0, finish=0, time= 0: 3:43
+rst=0, finish=0, time= 0: 3:44
+rst=0, finish=0, time= 0: 3:45
+rst=0, finish=0, time= 0: 3:46
+rst=0, finish=0, time= 0: 3:47
+rst=0, finish=0, time= 0: 3:48
+rst=0, finish=0, time= 0: 3:49
+rst=0, finish=0, time= 0: 3:50
+rst=0, finish=0, time= 0: 3:51
+rst=0, finish=0, time= 0: 3:52
+rst=0, finish=0, time= 0: 3:53
+rst=0, finish=0, time= 0: 3:54
+rst=0, finish=0, time= 0: 3:55
+rst=0, finish=0, time= 0: 3:56
+rst=0, finish=0, time= 0: 3:57
+rst=0, finish=0, time= 0: 3:58
+rst=0, finish=0, time= 0: 3:59
+rst=0, finish=0, time= 0: 4: 0
+rst=0, finish=0, time= 0: 4: 1
+rst=0, finish=0, time= 0: 4: 2
+rst=0, finish=0, time= 0: 4: 3
+rst=0, finish=0, time= 0: 4: 4
+rst=0, finish=0, time= 0: 4: 5
+rst=0, finish=0, time= 0: 4: 6
+rst=0, finish=0, time= 0: 4: 7
+rst=0, finish=0, time= 0: 4: 8
+rst=0, finish=0, time= 0: 4: 9
+rst=0, finish=0, time= 0: 4:10
+rst=0, finish=0, time= 0: 4:11
+rst=0, finish=0, time= 0: 4:12
+rst=0, finish=0, time= 0: 4:13
+rst=0, finish=0, time= 0: 4:14
+rst=0, finish=0, time= 0: 4:15
+rst=0, finish=0, time= 0: 4:16
+rst=0, finish=0, time= 0: 4:17
+rst=0, finish=0, time= 0: 4:18
+rst=0, finish=0, time= 0: 4:19
+rst=0, finish=0, time= 0: 4:20
+rst=0, finish=0, time= 0: 4:21
+rst=0, finish=0, time= 0: 4:22
+rst=0, finish=0, time= 0: 4:23
+rst=0, finish=0, time= 0: 4:24
+rst=0, finish=0, time= 0: 4:25
+rst=0, finish=0, time= 0: 4:26
+rst=0, finish=0, time= 0: 4:27
+rst=0, finish=0, time= 0: 4:28
+rst=0, finish=0, time= 0: 4:29
+rst=0, finish=0, time= 0: 4:30
+rst=0, finish=0, time= 0: 4:31
+rst=0, finish=0, time= 0: 4:32
+rst=0, finish=0, time= 0: 4:33
+rst=0, finish=0, time= 0: 4:34
+rst=0, finish=0, time= 0: 4:35
+rst=0, finish=0, time= 0: 4:36
+rst=0, finish=0, time= 0: 4:37
+rst=0, finish=0, time= 0: 4:38
+rst=0, finish=0, time= 0: 4:39
+rst=0, finish=0, time= 0: 4:40
+rst=0, finish=0, time= 0: 4:41
+rst=0, finish=0, time= 0: 4:42
+rst=0, finish=0, time= 0: 4:43
+rst=0, finish=0, time= 0: 4:44
+rst=0, finish=0, time= 0: 4:45
+rst=0, finish=0, time= 0: 4:46
+rst=0, finish=0, time= 0: 4:47
+rst=0, finish=0, time= 0: 4:48
+rst=0, finish=0, time= 0: 4:49
+rst=0, finish=0, time= 0: 4:50
+rst=0, finish=0, time= 0: 4:51
+rst=0, finish=0, time= 0: 4:52
+rst=0, finish=0, time= 0: 4:53
+rst=0, finish=0, time= 0: 4:54
+rst=0, finish=0, time= 0: 4:55
+rst=0, finish=0, time= 0: 4:56
+rst=0, finish=0, time= 0: 4:57
+rst=0, finish=0, time= 0: 4:58
+rst=0, finish=0, time= 0: 4:59
+rst=0, finish=0, time= 0: 5: 0
+rst=0, finish=0, time= 0: 5: 1
+rst=0, finish=0, time= 0: 5: 2
+rst=0, finish=0, time= 0: 5: 3
+rst=0, finish=0, time= 0: 5: 4
+rst=0, finish=0, time= 0: 5: 5
+rst=0, finish=0, time= 0: 5: 6
+rst=0, finish=0, time= 0: 5: 7
+rst=0, finish=0, time= 0: 5: 8
+rst=0, finish=0, time= 0: 5: 9
+rst=0, finish=0, time= 0: 5:10
+rst=0, finish=0, time= 0: 5:11
+rst=0, finish=0, time= 0: 5:12
+rst=0, finish=0, time= 0: 5:13
+rst=0, finish=0, time= 0: 5:14
+rst=0, finish=0, time= 0: 5:15
+rst=0, finish=0, time= 0: 5:16
+rst=0, finish=0, time= 0: 5:17
+rst=0, finish=0, time= 0: 5:18
+rst=0, finish=0, time= 0: 5:19
+rst=0, finish=0, time= 0: 5:20
+rst=0, finish=0, time= 0: 5:21
+rst=0, finish=0, time= 0: 5:22
+rst=0, finish=0, time= 0: 5:23
+rst=0, finish=0, time= 0: 5:24
+rst=0, finish=0, time= 0: 5:25
+rst=0, finish=0, time= 0: 5:26
+rst=0, finish=0, time= 0: 5:27
+rst=0, finish=0, time= 0: 5:28
+rst=0, finish=0, time= 0: 5:29
+rst=0, finish=0, time= 0: 5:30
+rst=0, finish=0, time= 0: 5:31
+rst=0, finish=0, time= 0: 5:32
+rst=0, finish=0, time= 0: 5:33
+rst=0, finish=0, time= 0: 5:34
+rst=0, finish=0, time= 0: 5:35
+rst=0, finish=0, time= 0: 5:36
+rst=0, finish=0, time= 0: 5:37
+rst=0, finish=0, time= 0: 5:38
+rst=0, finish=0, time= 0: 5:39
+rst=0, finish=0, time= 0: 5:40
+rst=0, finish=0, time= 0: 5:41
+rst=0, finish=0, time= 0: 5:42
+rst=0, finish=0, time= 0: 5:43
+rst=0, finish=0, time= 0: 5:44
+rst=0, finish=0, time= 0: 5:45
+rst=0, finish=0, time= 0: 5:46
+rst=0, finish=0, time= 0: 5:47
+rst=0, finish=0, time= 0: 5:48
+rst=0, finish=0, time= 0: 5:49
+rst=0, finish=0, time= 0: 5:50
+rst=0, finish=0, time= 0: 5:51
+rst=0, finish=0, time= 0: 5:52
+rst=0, finish=0, time= 0: 5:53
+rst=0, finish=0, time= 0: 5:54
+rst=0, finish=0, time= 0: 5:55
+rst=0, finish=0, time= 0: 5:56
+rst=0, finish=0, time= 0: 5:57
+rst=0, finish=0, time= 0: 5:58
+rst=0, finish=0, time= 0: 5:59
+rst=0, finish=0, time= 0: 6: 0
+rst=0, finish=0, time= 0: 6: 1
+rst=0, finish=0, time= 0: 6: 2
+rst=0, finish=0, time= 0: 6: 3
+rst=0, finish=0, time= 0: 6: 4
+rst=0, finish=0, time= 0: 6: 5
+rst=0, finish=0, time= 0: 6: 6
+rst=0, finish=0, time= 0: 6: 7
+rst=0, finish=0, time= 0: 6: 8
+rst=0, finish=0, time= 0: 6: 9
+rst=0, finish=0, time= 0: 6:10
+rst=0, finish=0, time= 0: 6:11
+rst=0, finish=0, time= 0: 6:12
+rst=0, finish=0, time= 0: 6:13
+rst=0, finish=0, time= 0: 6:14
+rst=0, finish=0, time= 0: 6:15
+rst=0, finish=0, time= 0: 6:16
+rst=0, finish=0, time= 0: 6:17
+rst=0, finish=0, time= 0: 6:18
+rst=0, finish=0, time= 0: 6:19
+rst=0, finish=0, time= 0: 6:20
+rst=0, finish=0, time= 0: 6:21
+rst=0, finish=0, time= 0: 6:22
+rst=0, finish=0, time= 0: 6:23
+rst=0, finish=0, time= 0: 6:24
+rst=0, finish=0, time= 0: 6:25
+rst=0, finish=0, time= 0: 6:26
+rst=0, finish=0, time= 0: 6:27
+rst=0, finish=0, time= 0: 6:28
+rst=0, finish=0, time= 0: 6:29
+rst=0, finish=0, time= 0: 6:30
+rst=0, finish=0, time= 0: 6:31
+rst=0, finish=0, time= 0: 6:32
+rst=0, finish=0, time= 0: 6:33
+rst=0, finish=0, time= 0: 6:34
+rst=0, finish=0, time= 0: 6:35
+rst=0, finish=0, time= 0: 6:36
+rst=0, finish=0, time= 0: 6:37
+rst=0, finish=0, time= 0: 6:38
+rst=0, finish=0, time= 0: 6:39
+rst=0, finish=0, time= 0: 6:40
+rst=0, finish=0, time= 0: 6:41
+rst=0, finish=0, time= 0: 6:42
+rst=0, finish=0, time= 0: 6:43
+rst=0, finish=0, time= 0: 6:44
+rst=0, finish=0, time= 0: 6:45
+rst=0, finish=0, time= 0: 6:46
+rst=0, finish=0, time= 0: 6:47
+rst=0, finish=0, time= 0: 6:48
+rst=0, finish=0, time= 0: 6:49
+rst=0, finish=0, time= 0: 6:50
+rst=0, finish=0, time= 0: 6:51
+rst=0, finish=0, time= 0: 6:52
+rst=0, finish=0, time= 0: 6:53
+rst=0, finish=0, time= 0: 6:54
+rst=0, finish=0, time= 0: 6:55
+rst=0, finish=0, time= 0: 6:56
+rst=0, finish=0, time= 0: 6:57
+rst=0, finish=0, time= 0: 6:58
+rst=0, finish=0, time= 0: 6:59
+rst=0, finish=0, time= 0: 7: 0
+rst=0, finish=0, time= 0: 7: 1
+rst=0, finish=0, time= 0: 7: 2
+rst=0, finish=0, time= 0: 7: 3
+rst=0, finish=0, time= 0: 7: 4
+rst=0, finish=0, time= 0: 7: 5
+rst=0, finish=0, time= 0: 7: 6
+rst=0, finish=0, time= 0: 7: 7
+rst=0, finish=0, time= 0: 7: 8
+rst=0, finish=0, time= 0: 7: 9
+rst=0, finish=0, time= 0: 7:10
+rst=0, finish=0, time= 0: 7:11
+rst=0, finish=0, time= 0: 7:12
+rst=0, finish=0, time= 0: 7:13
+rst=0, finish=0, time= 0: 7:14
+rst=0, finish=0, time= 0: 7:15
+rst=0, finish=0, time= 0: 7:16
+rst=0, finish=0, time= 0: 7:17
+rst=0, finish=0, time= 0: 7:18
+rst=0, finish=0, time= 0: 7:19
+rst=0, finish=0, time= 0: 7:20
+rst=0, finish=0, time= 0: 7:21
+rst=0, finish=0, time= 0: 7:22
+rst=0, finish=0, time= 0: 7:23
+rst=0, finish=0, time= 0: 7:24
+rst=0, finish=0, time= 0: 7:25
+rst=0, finish=0, time= 0: 7:26
+rst=0, finish=0, time= 0: 7:27
+rst=0, finish=0, time= 0: 7:28
+rst=0, finish=0, time= 0: 7:29
+rst=0, finish=0, time= 0: 7:30
+rst=0, finish=0, time= 0: 7:31
+rst=0, finish=0, time= 0: 7:32
+rst=0, finish=0, time= 0: 7:33
+rst=0, finish=0, time= 0: 7:34
+rst=0, finish=0, time= 0: 7:35
+rst=0, finish=0, time= 0: 7:36
+rst=0, finish=0, time= 0: 7:37
+rst=0, finish=0, time= 0: 7:38
+rst=0, finish=0, time= 0: 7:39
+rst=0, finish=0, time= 0: 7:40
+rst=0, finish=0, time= 0: 7:41
+rst=0, finish=0, time= 0: 7:42
+rst=0, finish=0, time= 0: 7:43
+rst=0, finish=0, time= 0: 7:44
+rst=0, finish=0, time= 0: 7:45
+rst=0, finish=0, time= 0: 7:46
+rst=0, finish=0, time= 0: 7:47
+rst=0, finish=0, time= 0: 7:48
+rst=0, finish=0, time= 0: 7:49
+rst=0, finish=0, time= 0: 7:50
+rst=0, finish=0, time= 0: 7:51
+rst=0, finish=0, time= 0: 7:52
+rst=0, finish=0, time= 0: 7:53
+rst=0, finish=0, time= 0: 7:54
+rst=0, finish=0, time= 0: 7:55
+rst=0, finish=0, time= 0: 7:56
+rst=0, finish=0, time= 0: 7:57
+rst=0, finish=0, time= 0: 7:58
+rst=0, finish=0, time= 0: 7:59
+rst=0, finish=0, time= 0: 8: 0
+rst=0, finish=0, time= 0: 8: 1
+rst=0, finish=0, time= 0: 8: 2
+rst=0, finish=0, time= 0: 8: 3
+rst=0, finish=0, time= 0: 8: 4
+rst=0, finish=0, time= 0: 8: 5
+rst=0, finish=0, time= 0: 8: 6
+rst=0, finish=0, time= 0: 8: 7
+rst=0, finish=0, time= 0: 8: 8
+rst=0, finish=0, time= 0: 8: 9
+rst=0, finish=0, time= 0: 8:10
+rst=0, finish=0, time= 0: 8:11
+rst=0, finish=0, time= 0: 8:12
+rst=0, finish=0, time= 0: 8:13
+rst=0, finish=0, time= 0: 8:14
+rst=0, finish=0, time= 0: 8:15
+rst=0, finish=0, time= 0: 8:16
+rst=0, finish=0, time= 0: 8:17
+rst=0, finish=0, time= 0: 8:18
+rst=0, finish=0, time= 0: 8:19
+rst=0, finish=0, time= 0: 8:20
+rst=0, finish=0, time= 0: 8:21
+rst=0, finish=0, time= 0: 8:22
+rst=0, finish=0, time= 0: 8:23
+rst=0, finish=0, time= 0: 8:24
+rst=0, finish=0, time= 0: 8:25
+rst=0, finish=0, time= 0: 8:26
+rst=0, finish=0, time= 0: 8:27
+rst=0, finish=0, time= 0: 8:28
+rst=0, finish=0, time= 0: 8:29
+rst=0, finish=0, time= 0: 8:30
+rst=0, finish=0, time= 0: 8:31
+rst=0, finish=0, time= 0: 8:32
+rst=0, finish=0, time= 0: 8:33
+rst=0, finish=0, time= 0: 8:34
+rst=0, finish=0, time= 0: 8:35
+rst=0, finish=0, time= 0: 8:36
+rst=0, finish=0, time= 0: 8:37
+rst=0, finish=0, time= 0: 8:38
+rst=0, finish=0, time= 0: 8:39
+rst=0, finish=0, time= 0: 8:40
+rst=0, finish=0, time= 0: 8:41
+rst=0, finish=0, time= 0: 8:42
+rst=0, finish=0, time= 0: 8:43
+rst=0, finish=0, time= 0: 8:44
+rst=0, finish=0, time= 0: 8:45
+rst=0, finish=0, time= 0: 8:46
+rst=0, finish=0, time= 0: 8:47
+rst=0, finish=0, time= 0: 8:48
+rst=0, finish=0, time= 0: 8:49
+rst=0, finish=0, time= 0: 8:50
+rst=0, finish=0, time= 0: 8:51
+rst=0, finish=0, time= 0: 8:52
+rst=0, finish=0, time= 0: 8:53
+rst=0, finish=0, time= 0: 8:54
+rst=0, finish=0, time= 0: 8:55
+rst=0, finish=0, time= 0: 8:56
+rst=0, finish=0, time= 0: 8:57
+rst=0, finish=0, time= 0: 8:58
+rst=0, finish=0, time= 0: 8:59
+rst=0, finish=0, time= 0: 9: 0
+rst=0, finish=0, time= 0: 9: 1
+rst=0, finish=0, time= 0: 9: 2
+rst=0, finish=0, time= 0: 9: 3
+rst=0, finish=0, time= 0: 9: 4
+rst=0, finish=0, time= 0: 9: 5
+rst=0, finish=0, time= 0: 9: 6
+rst=0, finish=0, time= 0: 9: 7
+rst=0, finish=0, time= 0: 9: 8
+rst=0, finish=0, time= 0: 9: 9
+rst=0, finish=0, time= 0: 9:10
+rst=0, finish=0, time= 0: 9:11
+rst=0, finish=0, time= 0: 9:12
+rst=0, finish=0, time= 0: 9:13
+rst=0, finish=0, time= 0: 9:14
+rst=0, finish=0, time= 0: 9:15
+rst=0, finish=0, time= 0: 9:16
+rst=0, finish=0, time= 0: 9:17
+rst=0, finish=0, time= 0: 9:18
+rst=0, finish=0, time= 0: 9:19
+rst=0, finish=0, time= 0: 9:20
+rst=0, finish=0, time= 0: 9:21
+rst=0, finish=0, time= 0: 9:22
+rst=0, finish=0, time= 0: 9:23
+rst=0, finish=0, time= 0: 9:24
+rst=0, finish=0, time= 0: 9:25
+rst=0, finish=0, time= 0: 9:26
+rst=0, finish=0, time= 0: 9:27
+rst=0, finish=0, time= 0: 9:28
+rst=0, finish=0, time= 0: 9:29
+rst=0, finish=0, time= 0: 9:30
+rst=0, finish=0, time= 0: 9:31
+rst=0, finish=0, time= 0: 9:32
+rst=0, finish=0, time= 0: 9:33
+rst=0, finish=0, time= 0: 9:34
+rst=0, finish=0, time= 0: 9:35
+rst=0, finish=0, time= 0: 9:36
+rst=0, finish=0, time= 0: 9:37
+rst=0, finish=0, time= 0: 9:38
+rst=0, finish=0, time= 0: 9:39
+rst=0, finish=0, time= 0: 9:40
+rst=0, finish=0, time= 0: 9:41
+rst=0, finish=0, time= 0: 9:42
+rst=0, finish=0, time= 0: 9:43
+rst=0, finish=0, time= 0: 9:44
+rst=0, finish=0, time= 0: 9:45
+rst=0, finish=0, time= 0: 9:46
+rst=0, finish=0, time= 0: 9:47
+rst=0, finish=0, time= 0: 9:48
+rst=0, finish=0, time= 0: 9:49
+rst=0, finish=0, time= 0: 9:50
+rst=0, finish=0, time= 0: 9:51
+rst=0, finish=0, time= 0: 9:52
+rst=0, finish=0, time= 0: 9:53
+rst=0, finish=0, time= 0: 9:54
+rst=0, finish=0, time= 0: 9:55
+rst=0, finish=0, time= 0: 9:56
+rst=0, finish=0, time= 0: 9:57
+rst=0, finish=0, time= 0: 9:58
+rst=0, finish=0, time= 0: 9:59
+rst=0, finish=0, time= 0:10: 0
+rst=0, finish=0, time= 0:10: 1
+rst=0, finish=0, time= 0:10: 2
+rst=0, finish=0, time= 0:10: 3
+rst=0, finish=0, time= 0:10: 4
+rst=0, finish=0, time= 0:10: 5
+rst=0, finish=0, time= 0:10: 6
+rst=0, finish=0, time= 0:10: 7
+rst=0, finish=0, time= 0:10: 8
+rst=0, finish=0, time= 0:10: 9
+rst=0, finish=0, time= 0:10:10
+rst=0, finish=0, time= 0:10:11
+rst=0, finish=0, time= 0:10:12
+rst=0, finish=0, time= 0:10:13
+rst=0, finish=0, time= 0:10:14
+rst=0, finish=0, time= 0:10:15
+rst=0, finish=0, time= 0:10:16
+rst=0, finish=0, time= 0:10:17
+rst=0, finish=0, time= 0:10:18
+rst=0, finish=0, time= 0:10:19
+rst=0, finish=0, time= 0:10:20
+rst=0, finish=0, time= 0:10:21
+rst=0, finish=0, time= 0:10:22
+rst=0, finish=0, time= 0:10:23
+rst=0, finish=0, time= 0:10:24
+rst=0, finish=0, time= 0:10:25
+rst=0, finish=0, time= 0:10:26
+rst=0, finish=0, time= 0:10:27
+rst=0, finish=0, time= 0:10:28
+rst=0, finish=0, time= 0:10:29
+rst=0, finish=0, time= 0:10:30
+rst=0, finish=0, time= 0:10:31
+rst=0, finish=0, time= 0:10:32
+rst=0, finish=0, time= 0:10:33
+rst=0, finish=0, time= 0:10:34
+rst=0, finish=0, time= 0:10:35
+rst=0, finish=0, time= 0:10:36
+rst=0, finish=0, time= 0:10:37
+rst=0, finish=0, time= 0:10:38
+rst=0, finish=0, time= 0:10:39
+rst=0, finish=0, time= 0:10:40
+rst=0, finish=0, time= 0:10:41
+rst=0, finish=0, time= 0:10:42
+rst=0, finish=0, time= 0:10:43
+rst=0, finish=0, time= 0:10:44
+rst=0, finish=0, time= 0:10:45
+rst=0, finish=0, time= 0:10:46
+rst=0, finish=0, time= 0:10:47
+rst=0, finish=0, time= 0:10:48
+rst=0, finish=0, time= 0:10:49
+rst=0, finish=0, time= 0:10:50
+rst=0, finish=0, time= 0:10:51
+rst=0, finish=0, time= 0:10:52
+rst=0, finish=0, time= 0:10:53
+rst=0, finish=0, time= 0:10:54
+rst=0, finish=0, time= 0:10:55
+rst=0, finish=0, time= 0:10:56
+rst=0, finish=0, time= 0:10:57
+rst=0, finish=0, time= 0:10:58
+rst=0, finish=0, time= 0:10:59
+rst=0, finish=0, time= 0:11: 0
+rst=0, finish=0, time= 0:11: 1
+rst=0, finish=0, time= 0:11: 2
+rst=0, finish=0, time= 0:11: 3
+rst=0, finish=0, time= 0:11: 4
+rst=0, finish=0, time= 0:11: 5
+rst=0, finish=0, time= 0:11: 6
+rst=0, finish=0, time= 0:11: 7
+rst=0, finish=0, time= 0:11: 8
+rst=0, finish=0, time= 0:11: 9
+rst=0, finish=0, time= 0:11:10
+rst=0, finish=0, time= 0:11:11
+rst=0, finish=0, time= 0:11:12
+rst=0, finish=0, time= 0:11:13
+rst=0, finish=0, time= 0:11:14
+rst=0, finish=0, time= 0:11:15
+rst=0, finish=0, time= 0:11:16
+rst=0, finish=0, time= 0:11:17
+rst=0, finish=0, time= 0:11:18
+rst=0, finish=0, time= 0:11:19
+rst=0, finish=0, time= 0:11:20
+rst=0, finish=0, time= 0:11:21
+rst=0, finish=0, time= 0:11:22
+rst=0, finish=0, time= 0:11:23
+rst=0, finish=0, time= 0:11:24
+rst=0, finish=0, time= 0:11:25
+rst=0, finish=0, time= 0:11:26
+rst=0, finish=0, time= 0:11:27
+rst=0, finish=0, time= 0:11:28
+rst=0, finish=0, time= 0:11:29
+rst=0, finish=0, time= 0:11:30
+rst=0, finish=0, time= 0:11:31
+rst=0, finish=0, time= 0:11:32
+rst=0, finish=0, time= 0:11:33
+rst=0, finish=0, time= 0:11:34
+rst=0, finish=0, time= 0:11:35
+rst=0, finish=0, time= 0:11:36
+rst=0, finish=0, time= 0:11:37
+rst=0, finish=0, time= 0:11:38
+rst=0, finish=0, time= 0:11:39
+rst=0, finish=0, time= 0:11:40
+rst=0, finish=0, time= 0:11:41
+rst=0, finish=0, time= 0:11:42
+rst=0, finish=0, time= 0:11:43
+rst=0, finish=0, time= 0:11:44
+rst=0, finish=0, time= 0:11:45
+rst=0, finish=0, time= 0:11:46
+rst=0, finish=0, time= 0:11:47
+rst=0, finish=0, time= 0:11:48
+rst=0, finish=0, time= 0:11:49
+rst=0, finish=0, time= 0:11:50
+rst=0, finish=0, time= 0:11:51
+rst=0, finish=0, time= 0:11:52
+rst=0, finish=0, time= 0:11:53
+rst=0, finish=0, time= 0:11:54
+rst=0, finish=0, time= 0:11:55
+rst=0, finish=0, time= 0:11:56
+rst=0, finish=0, time= 0:11:57
+rst=0, finish=0, time= 0:11:58
+rst=0, finish=0, time= 0:11:59
+rst=0, finish=0, time= 0:12: 0
+rst=0, finish=0, time= 0:12: 1
+rst=0, finish=0, time= 0:12: 2
+rst=0, finish=0, time= 0:12: 3
+rst=0, finish=0, time= 0:12: 4
+rst=0, finish=0, time= 0:12: 5
+rst=0, finish=0, time= 0:12: 6
+rst=0, finish=0, time= 0:12: 7
+rst=0, finish=0, time= 0:12: 8
+rst=0, finish=0, time= 0:12: 9
+rst=0, finish=0, time= 0:12:10
+rst=0, finish=0, time= 0:12:11
+rst=0, finish=0, time= 0:12:12
+rst=0, finish=0, time= 0:12:13
+rst=0, finish=0, time= 0:12:14
+rst=0, finish=0, time= 0:12:15
+rst=0, finish=0, time= 0:12:16
+rst=0, finish=0, time= 0:12:17
+rst=0, finish=0, time= 0:12:18
+rst=0, finish=0, time= 0:12:19
+rst=0, finish=0, time= 0:12:20
+rst=0, finish=0, time= 0:12:21
+rst=0, finish=0, time= 0:12:22
+rst=0, finish=0, time= 0:12:23
+rst=0, finish=0, time= 0:12:24
+rst=0, finish=0, time= 0:12:25
+rst=0, finish=0, time= 0:12:26
+rst=0, finish=0, time= 0:12:27
+rst=0, finish=0, time= 0:12:28
+rst=0, finish=0, time= 0:12:29
+rst=0, finish=0, time= 0:12:30
+rst=0, finish=0, time= 0:12:31
+rst=0, finish=0, time= 0:12:32
+rst=0, finish=0, time= 0:12:33
+rst=0, finish=0, time= 0:12:34
+rst=0, finish=0, time= 0:12:35
+rst=0, finish=0, time= 0:12:36
+rst=0, finish=0, time= 0:12:37
+rst=0, finish=0, time= 0:12:38
+rst=0, finish=0, time= 0:12:39
+rst=0, finish=0, time= 0:12:40
+rst=0, finish=0, time= 0:12:41
+rst=0, finish=0, time= 0:12:42
+rst=0, finish=0, time= 0:12:43
+rst=0, finish=0, time= 0:12:44
+rst=0, finish=0, time= 0:12:45
+rst=0, finish=0, time= 0:12:46
+rst=0, finish=0, time= 0:12:47
+rst=0, finish=0, time= 0:12:48
+rst=0, finish=0, time= 0:12:49
+rst=0, finish=0, time= 0:12:50
+rst=0, finish=0, time= 0:12:51
+rst=0, finish=0, time= 0:12:52
+rst=0, finish=0, time= 0:12:53
+rst=0, finish=0, time= 0:12:54
+rst=0, finish=0, time= 0:12:55
+rst=0, finish=0, time= 0:12:56
+rst=0, finish=0, time= 0:12:57
+rst=0, finish=0, time= 0:12:58
+rst=0, finish=0, time= 0:12:59
+rst=0, finish=0, time= 0:13: 0
+rst=0, finish=0, time= 0:13: 1
+rst=0, finish=0, time= 0:13: 2
+rst=0, finish=0, time= 0:13: 3
+rst=0, finish=0, time= 0:13: 4
+rst=0, finish=0, time= 0:13: 5
+rst=0, finish=0, time= 0:13: 6
+rst=0, finish=0, time= 0:13: 7
+rst=0, finish=0, time= 0:13: 8
+rst=0, finish=0, time= 0:13: 9
+rst=0, finish=0, time= 0:13:10
+rst=0, finish=0, time= 0:13:11
+rst=0, finish=0, time= 0:13:12
+rst=0, finish=0, time= 0:13:13
+rst=0, finish=0, time= 0:13:14
+rst=0, finish=0, time= 0:13:15
+rst=0, finish=0, time= 0:13:16
+rst=0, finish=0, time= 0:13:17
+rst=0, finish=0, time= 0:13:18
+rst=0, finish=0, time= 0:13:19
+rst=0, finish=0, time= 0:13:20
+rst=0, finish=0, time= 0:13:21
+rst=0, finish=0, time= 0:13:22
+rst=0, finish=0, time= 0:13:23
+rst=0, finish=0, time= 0:13:24
+rst=0, finish=0, time= 0:13:25
+rst=0, finish=0, time= 0:13:26
+rst=0, finish=0, time= 0:13:27
+rst=0, finish=0, time= 0:13:28
+rst=0, finish=0, time= 0:13:29
+rst=0, finish=0, time= 0:13:30
+rst=0, finish=0, time= 0:13:31
+rst=0, finish=0, time= 0:13:32
+rst=0, finish=0, time= 0:13:33
+rst=0, finish=0, time= 0:13:34
+rst=0, finish=0, time= 0:13:35
+rst=0, finish=0, time= 0:13:36
+rst=0, finish=0, time= 0:13:37
+rst=0, finish=0, time= 0:13:38
+rst=0, finish=0, time= 0:13:39
+rst=0, finish=0, time= 0:13:40
+rst=0, finish=0, time= 0:13:41
+rst=0, finish=0, time= 0:13:42
+rst=0, finish=0, time= 0:13:43
+rst=0, finish=0, time= 0:13:44
+rst=0, finish=0, time= 0:13:45
+rst=0, finish=0, time= 0:13:46
+rst=0, finish=0, time= 0:13:47
+rst=0, finish=0, time= 0:13:48
+rst=0, finish=0, time= 0:13:49
+rst=0, finish=0, time= 0:13:50
+rst=0, finish=0, time= 0:13:51
+rst=0, finish=0, time= 0:13:52
+rst=0, finish=0, time= 0:13:53
+rst=0, finish=0, time= 0:13:54
+rst=0, finish=0, time= 0:13:55
+rst=0, finish=0, time= 0:13:56
+rst=0, finish=0, time= 0:13:57
+rst=0, finish=0, time= 0:13:58
+rst=0, finish=0, time= 0:13:59
+rst=0, finish=0, time= 0:14: 0
+rst=0, finish=0, time= 0:14: 1
+rst=0, finish=0, time= 0:14: 2
+rst=0, finish=0, time= 0:14: 3
+rst=0, finish=0, time= 0:14: 4
+rst=0, finish=0, time= 0:14: 5
+rst=0, finish=0, time= 0:14: 6
+rst=0, finish=0, time= 0:14: 7
+rst=0, finish=0, time= 0:14: 8
+rst=0, finish=0, time= 0:14: 9
+rst=0, finish=0, time= 0:14:10
+rst=0, finish=0, time= 0:14:11
+rst=0, finish=0, time= 0:14:12
+rst=0, finish=0, time= 0:14:13
+rst=0, finish=0, time= 0:14:14
+rst=0, finish=0, time= 0:14:15
+rst=0, finish=0, time= 0:14:16
+rst=0, finish=0, time= 0:14:17
+rst=0, finish=0, time= 0:14:18
+rst=0, finish=0, time= 0:14:19
+rst=0, finish=0, time= 0:14:20
+rst=0, finish=0, time= 0:14:21
+rst=0, finish=0, time= 0:14:22
+rst=0, finish=0, time= 0:14:23
+rst=0, finish=0, time= 0:14:24
+rst=0, finish=0, time= 0:14:25
+rst=0, finish=0, time= 0:14:26
+rst=0, finish=0, time= 0:14:27
+rst=0, finish=0, time= 0:14:28
+rst=0, finish=0, time= 0:14:29
+rst=0, finish=0, time= 0:14:30
+rst=0, finish=0, time= 0:14:31
+rst=0, finish=0, time= 0:14:32
+rst=0, finish=0, time= 0:14:33
+rst=0, finish=0, time= 0:14:34
+rst=0, finish=0, time= 0:14:35
+rst=0, finish=0, time= 0:14:36
+rst=0, finish=0, time= 0:14:37
+rst=0, finish=0, time= 0:14:38
+rst=0, finish=0, time= 0:14:39
+rst=0, finish=0, time= 0:14:40
+rst=0, finish=0, time= 0:14:41
+rst=0, finish=0, time= 0:14:42
+rst=0, finish=0, time= 0:14:43
+rst=0, finish=0, time= 0:14:44
+rst=0, finish=0, time= 0:14:45
+rst=0, finish=0, time= 0:14:46
+rst=0, finish=0, time= 0:14:47
+rst=0, finish=0, time= 0:14:48
+rst=0, finish=0, time= 0:14:49
+rst=0, finish=0, time= 0:14:50
+rst=0, finish=0, time= 0:14:51
+rst=0, finish=0, time= 0:14:52
+rst=0, finish=0, time= 0:14:53
+rst=0, finish=0, time= 0:14:54
+rst=0, finish=0, time= 0:14:55
+rst=0, finish=0, time= 0:14:56
+rst=0, finish=0, time= 0:14:57
+rst=0, finish=0, time= 0:14:58
+rst=0, finish=0, time= 0:14:59
+rst=0, finish=0, time= 0:15: 0
+rst=0, finish=0, time= 0:15: 1
+rst=0, finish=0, time= 0:15: 2
+rst=0, finish=0, time= 0:15: 3
+rst=0, finish=0, time= 0:15: 4
+rst=0, finish=0, time= 0:15: 5
+rst=0, finish=0, time= 0:15: 6
+rst=0, finish=0, time= 0:15: 7
+rst=0, finish=0, time= 0:15: 8
+rst=0, finish=0, time= 0:15: 9
+rst=0, finish=0, time= 0:15:10
+rst=0, finish=0, time= 0:15:11
+rst=0, finish=0, time= 0:15:12
+rst=0, finish=0, time= 0:15:13
+rst=0, finish=0, time= 0:15:14
+rst=0, finish=0, time= 0:15:15
+rst=0, finish=0, time= 0:15:16
+rst=0, finish=0, time= 0:15:17
+rst=0, finish=0, time= 0:15:18
+rst=0, finish=0, time= 0:15:19
+rst=0, finish=0, time= 0:15:20
+rst=0, finish=0, time= 0:15:21
+rst=0, finish=0, time= 0:15:22
+rst=0, finish=0, time= 0:15:23
+rst=0, finish=0, time= 0:15:24
+rst=0, finish=0, time= 0:15:25
+rst=0, finish=0, time= 0:15:26
+rst=0, finish=0, time= 0:15:27
+rst=0, finish=0, time= 0:15:28
+rst=0, finish=0, time= 0:15:29
+rst=0, finish=0, time= 0:15:30
+rst=0, finish=0, time= 0:15:31
+rst=0, finish=0, time= 0:15:32
+rst=0, finish=0, time= 0:15:33
+rst=0, finish=0, time= 0:15:34
+rst=0, finish=0, time= 0:15:35
+rst=0, finish=0, time= 0:15:36
+rst=0, finish=0, time= 0:15:37
+rst=0, finish=0, time= 0:15:38
+rst=0, finish=0, time= 0:15:39
+rst=0, finish=0, time= 0:15:40
+rst=0, finish=0, time= 0:15:41
+rst=0, finish=0, time= 0:15:42
+rst=0, finish=0, time= 0:15:43
+rst=0, finish=0, time= 0:15:44
+rst=0, finish=0, time= 0:15:45
+rst=0, finish=0, time= 0:15:46
+rst=0, finish=0, time= 0:15:47
+rst=0, finish=0, time= 0:15:48
+rst=0, finish=0, time= 0:15:49
+rst=0, finish=0, time= 0:15:50
+rst=0, finish=0, time= 0:15:51
+rst=0, finish=0, time= 0:15:52
+rst=0, finish=0, time= 0:15:53
+rst=0, finish=0, time= 0:15:54
+rst=0, finish=0, time= 0:15:55
+rst=0, finish=0, time= 0:15:56
+rst=0, finish=0, time= 0:15:57
+rst=0, finish=0, time= 0:15:58
+rst=0, finish=0, time= 0:15:59
+rst=0, finish=0, time= 0:16: 0
+rst=0, finish=0, time= 0:16: 1
+rst=0, finish=0, time= 0:16: 2
+rst=0, finish=0, time= 0:16: 3
+rst=0, finish=0, time= 0:16: 4
+rst=0, finish=0, time= 0:16: 5
+rst=0, finish=0, time= 0:16: 6
+rst=0, finish=0, time= 0:16: 7
+rst=0, finish=0, time= 0:16: 8
+rst=0, finish=0, time= 0:16: 9
+rst=0, finish=0, time= 0:16:10
+rst=0, finish=0, time= 0:16:11
+rst=0, finish=0, time= 0:16:12
+rst=0, finish=0, time= 0:16:13
+rst=0, finish=0, time= 0:16:14
+rst=0, finish=0, time= 0:16:15
+rst=0, finish=0, time= 0:16:16
+rst=0, finish=0, time= 0:16:17
+rst=0, finish=0, time= 0:16:18
+rst=0, finish=0, time= 0:16:19
+rst=0, finish=0, time= 0:16:20
+rst=0, finish=0, time= 0:16:21
+rst=0, finish=0, time= 0:16:22
+rst=0, finish=0, time= 0:16:23
+rst=0, finish=0, time= 0:16:24
+rst=0, finish=0, time= 0:16:25
+rst=0, finish=0, time= 0:16:26
+rst=0, finish=0, time= 0:16:27
+rst=0, finish=0, time= 0:16:28
+rst=0, finish=0, time= 0:16:29
+rst=0, finish=0, time= 0:16:30
+rst=0, finish=0, time= 0:16:31
+rst=0, finish=0, time= 0:16:32
+rst=0, finish=0, time= 0:16:33
+rst=0, finish=0, time= 0:16:34
+rst=0, finish=0, time= 0:16:35
+rst=0, finish=0, time= 0:16:36
+rst=0, finish=0, time= 0:16:37
+rst=0, finish=0, time= 0:16:38
+rst=0, finish=0, time= 0:16:39
+rst=0, finish=0, time= 0:16:40
+TIMER_TB.v:16: $finish called at 505000 (1ps)
+rst=0, finish=0, time= 0:16:41
+[Done] exit with code=0 in 0.155 seconds
+
