@@ -1,0 +1,69 @@
+RTL:
+
+`timescale 1ns / 1ps
+//Date : 04/06/2025
+//Name : Shankhalika Mallick
+
+// DAY-90 FIBONACCI GENERATOR
+
+module FIBONACCI(clk, rst, a, b);
+input clk, rst;
+output reg [7:0] a, b;
+always @(posedge clk)
+begin
+    if(rst==1)
+    begin
+        a=1'b1; b=1'b1;
+    end
+    else
+    begin
+        b=a+b;
+        a=b-a;
+    end
+end
+endmodule
+
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+TESTBENCH:
+
+`timescale 1ps/1ps
+`include "FIBONACCI.v"
+
+module FIBONACCI_TB();
+reg clk, rst;
+wire [7:0] a,b;
+FIBONACCI ob(clk, rst, a, b);
+initial begin
+    clk=1'b0;
+    rst=1'b1;
+    #10; rst=1'b0; 
+    #5; $display ("%d \n%d", a,b);
+    $monitor("%d",b);
+    #102; $finish;
+end
+always 
+#5 clk=~clk;
+endmodule
+
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+OUTPUT:
+
+[Running] FIBONACCI_TB.v
+  1 
+  1
+  2
+  3
+  5
+  8
+ 13
+ 21
+ 34
+ 55
+ 89
+144
+233
+FIBONACCI_TB.v:14: $finish called at 117000 (1ps)
+[Done] exit with code=0 in 0.146 seconds
+
