@@ -1,0 +1,70 @@
+RTL:
+
+`timescale 1ns / 1ps
+//Date : 02/06/2025
+//Name : Shankhalika Mallick
+
+// DAY-89 CLOCK GATING USING DUAL LATCH
+
+module GATING(en, clk);
+input en;
+output clk;
+wire d1, d2;
+reg q1, q2;
+assign clk=q2;
+assign d1=en;
+assign d2=q1;
+always @(*)
+begin
+    if(en==1'b1)
+    begin
+        q1=d1;
+        q2<=q2;
+    end
+    else
+    begin
+        q1<=q1;
+        q2=d2;
+    end
+end
+endmodule
+
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+TESTBENCH:
+
+`timescale 1ps/1ps
+`include "GATING.v"
+
+module GATING_TB();
+reg en;
+wire clk;
+GATING ob(en, clk);
+initial begin
+    $monitor("enable=%b, clk=%b",en, clk);
+    en=1'b0;
+    #10; en=1;
+    #10; en=0;
+    #10; en=1;
+    #10; en=0;
+    #10; en=1;
+    #10; en=0;
+    #20; $finish;
+end
+endmodule
+
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+OUTPUT:
+
+[Running] GATING_TB.v
+enable=0, clk=x
+enable=1, clk=x
+enable=0, clk=1
+enable=1, clk=1
+enable=0, clk=1
+enable=1, clk=1
+enable=0, clk=1
+GATING_TB.v:17: $finish called at 80000 (1ps)
+[Done] exit with code=0 in 0.155 seconds
+
