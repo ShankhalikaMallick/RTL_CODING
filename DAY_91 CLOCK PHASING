@@ -1,0 +1,69 @@
+RTL:
+
+`timescale 1ns / 1ps
+//Date : 05/06/2025
+//Name : Shankhalika Mallick
+
+// DAY-91 CLOCK PHASING
+
+module PHASING(clk1, clk2, clk3);
+output clk1, clk2, clk3;
+// clk1 and clk2 have 90 degree phase shift
+// clk1 and clk3 have 180 degree phase shift
+reg [1:0] count1, count2;
+assign clk1=count1[1];
+assign clk2= count2[1];
+assign clk3=~count1[1];
+initial begin
+    count1=0;
+    count2=0;
+end
+always 
+begin
+    #5; 
+    count1=count1+1'b1; 
+    // base clock set up
+end
+always @(count1)
+count2=count1+1'b1;
+endmodule
+
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+TESTBENCH:
+
+`timescale 1ps/1ps
+`include "PHASING.v"
+
+module PHASING_TB();
+wire clk1, clk2, clk3;
+PHASING ob(clk1, clk2, clk3);
+initial begin
+    $monitor("clk1=%b, clk2=%b, clk3=%b",clk1, clk2, clk3);
+    #70; $finish;
+end
+endmodule
+
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+OUTPUT:
+
+[Running] PHASING_TB.v
+clk1=0, clk2=0, clk3=1
+clk1=0, clk2=1, clk3=1
+clk1=1, clk2=1, clk3=0
+clk1=1, clk2=0, clk3=0
+clk1=0, clk2=0, clk3=1
+clk1=0, clk2=1, clk3=1
+clk1=1, clk2=1, clk3=0
+clk1=1, clk2=0, clk3=0
+clk1=0, clk2=0, clk3=1
+clk1=0, clk2=1, clk3=1
+clk1=1, clk2=1, clk3=0
+clk1=1, clk2=0, clk3=0
+clk1=0, clk2=0, clk3=1
+clk1=0, clk2=1, clk3=1
+PHASING_TB.v:9: $finish called at 70000 (1ps)
+clk1=1, clk2=1, clk3=0
+[Done] exit with code=0 in 0.176 seconds
+
