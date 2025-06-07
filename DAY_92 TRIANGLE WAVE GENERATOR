@@ -1,0 +1,115 @@
+RTL:
+
+`timescale 1ns / 1ps
+//Date : 06/06/2025
+//Name : Shankhalika Mallick
+
+// DAY-92 TRIANGLE WAVE GENERATOR
+
+module TRIANGLE(clk, direction, count);
+input clk;
+output reg direction;
+output reg [8:0] count;
+initial begin
+    count=0;
+    direction=1;
+end
+always @(posedge clk)
+begin
+    if(direction==1)
+    begin
+        count= count+ 5;
+        if(count==50)
+        direction =0;
+    end
+    else if(direction==0)
+    begin
+        count= count- 5;
+        if(count==0)
+        direction=1;
+    end
+end
+endmodule
+
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+TESTBENCH:
+
+`timescale 1ps/1ps
+`include "TRIANGLE.v"
+
+module TRIANGLE_TB();
+reg clk;
+wire [8:0] count;
+wire direction;
+TRIANGLE ob(clk, direction, count);
+initial begin
+    clk=1'b0;
+    $monitor("count=%d, direction=%d", count, direction);
+    #200; $finish;
+end
+always 
+begin
+    #2; clk=~clk;
+end
+endmodule
+
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+OUTPUT:
+
+[Running] TRIANGLE_TB.v
+count=  0, direction=1
+count=  5, direction=1
+count= 10, direction=1
+count= 15, direction=1
+count= 20, direction=1
+count= 25, direction=1
+count= 30, direction=1
+count= 35, direction=1
+count= 40, direction=1
+count= 45, direction=1
+count= 50, direction=0
+count= 45, direction=0
+count= 40, direction=0
+count= 35, direction=0
+count= 30, direction=0
+count= 25, direction=0
+count= 20, direction=0
+count= 15, direction=0
+count= 10, direction=0
+count=  5, direction=0
+count=  0, direction=1
+count=  5, direction=1
+count= 10, direction=1
+count= 15, direction=1
+count= 20, direction=1
+count= 25, direction=1
+count= 30, direction=1
+count= 35, direction=1
+count= 40, direction=1
+count= 45, direction=1
+count= 50, direction=0
+count= 45, direction=0
+count= 40, direction=0
+count= 35, direction=0
+count= 30, direction=0
+count= 25, direction=0
+count= 20, direction=0
+count= 15, direction=0
+count= 10, direction=0
+count=  5, direction=0
+count=  0, direction=1
+count=  5, direction=1
+count= 10, direction=1
+count= 15, direction=1
+count= 20, direction=1
+count= 25, direction=1
+count= 30, direction=1
+count= 35, direction=1
+count= 40, direction=1
+count= 45, direction=1
+count= 50, direction=0
+TRIANGLE_TB.v:12: $finish called at 200000 (1ps)
+[Done] exit with code=0 in 0.141 seconds
+
