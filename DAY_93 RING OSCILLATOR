@@ -1,0 +1,62 @@
+RTL:
+
+`timescale 1ns / 1ps
+//Date : 07/06/2025
+//Name : Shankhalika Mallick
+
+// DAY-93 RING OSCILLATOR
+
+module OSCILLATOR(A,B,C,D);
+//no external clock required
+output reg A,B,C,D;
+initial begin
+    A=0; 
+    B=0;
+    C=0; 
+    D=0;
+end
+always
+begin
+    #5; 
+    B=~A; 
+    C=~B; 
+    D=~C; 
+    A=D;
+end
+endmodule
+
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+TESTBENCH:
+
+`timescale 1ps/1ps
+`include "OSCILLATOR.v"
+
+module OSCILLATOR_TB();
+wire A,B,C,D;
+OSCILLATOR OB(A,B,C,D);
+initial begin
+    $monitor("A=%b, B=%b, C=%b, D=%b",A,B,C,D);
+    #52; $finish;
+end
+endmodule
+
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+OUTPUT:
+
+[Running] OSCILLATOR_TB.v
+A=0, B=0, C=0, D=0
+A=1, B=1, C=0, D=1
+A=0, B=0, C=1, D=0
+A=1, B=1, C=0, D=1
+A=0, B=0, C=1, D=0
+A=1, B=1, C=0, D=1
+A=0, B=0, C=1, D=0
+A=1, B=1, C=0, D=1
+A=0, B=0, C=1, D=0
+A=1, B=1, C=0, D=1
+A=0, B=0, C=1, D=0
+OSCILLATOR_TB.v:9: $finish called at 52000 (1ps)
+[Done] exit with code=0 in 0.29 seconds
+
