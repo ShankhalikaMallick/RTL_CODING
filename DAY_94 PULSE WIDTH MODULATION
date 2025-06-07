@@ -1,0 +1,75 @@
+RTL:
+
+`timescale 1ns / 1ps
+//Date : 08/06/2025
+//Name : Shankhalika Mallick
+
+// DAY-94 PULSE WIDTH MODULATION
+
+module PWM(clk, rst, dutycycle, pwm );
+input clk, rst;
+input [7:0] dutycycle;
+output reg pwm;
+reg [7:0] count;
+always @(posedge clk)
+begin
+    if(rst==1)
+    count=0;
+    else begin
+        count=count+1;
+        if(count==100)
+        count=0;
+    end
+end
+always @(count)
+begin
+    if(count<= dutycycle)
+    pwm=1;
+    else
+    pwm=0;
+end
+endmodule
+
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+TESTBENCH:
+
+`timescale 1ps/1ps
+`include "PWM.v"
+
+module PWM_TB();
+reg clk, rst;
+reg [7:0] dutycycle;
+wire pwm;
+PWM ob(clk, rst, dutycycle, pwm );
+initial begin
+    clk=1'b0;
+    rst=1'b1;
+    $monitor("rst=%b; pwm=%b",rst, pwm);
+    #2; rst=0; dutycycle=50;
+    #200; rst=1; dutycycle=80;
+    #3; rst=0;
+    #200; $finish;
+end
+always 
+#1 clk=~clk;
+endmodule
+
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+OUTPUT:
+
+[Running] PWM_TB.v
+rst=1; pwm=x
+rst=1; pwm=0
+rst=0; pwm=0
+rst=0; pwm=1
+rst=0; pwm=0
+rst=0; pwm=1
+rst=1; pwm=1
+rst=0; pwm=1
+rst=0; pwm=0
+rst=0; pwm=1
+PWM_TB.v:16: $finish called at 405000 (1ps)
+[Done] exit with code=0 in 0.255 seconds
+
