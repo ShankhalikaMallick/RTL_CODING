@@ -1,0 +1,130 @@
+RTL:
+
+`timescale 1ns / 1ps
+//Date : 10/06/2025
+//Name : Shankhalika Mallick
+
+// DAY-96 UART TRANSMITTER
+
+module uart_tx (
+    input wire clk,         // system clock
+    input wire rst,         // reset signal
+    input wire [7:0] data,  // 8-bit data to transmit
+    input wire start,       // signal to start transmission
+    output reg tx,          // UART transmit line
+    output reg busy         // high when transmitting
+);
+
+parameter BAUD_DIV = 10416; // adjust according to clock (e.g., for 9600bps @ 100MHz clk)
+
+reg [13:0] clk_count;
+reg [3:0] bit_index;
+reg [9:0] tx_shift;
+
+always @(posedge clk or posedge rst) begin
+    if (rst) begin
+        clk_count <= 0;
+        bit_index <= 0;
+        tx_shift <= 10'b1111111111;
+        tx <= 1;
+        busy <= 0;
+    end else begin
+        if (start && !busy) begin
+            tx_shift <= {1'b1, data, 1'b0};  // Stop(1) + Data + Start(0)
+            busy <= 1;
+            clk_count <= 0;
+            bit_index <= 0;
+        end else if (busy) begin
+            if (clk_count == BAUD_DIV - 1) begin
+                clk_count <= 0;
+                tx <= tx_shift[0];
+                tx_shift <= {1'b1, tx_shift[9:1]};  // Shift right, pad with 1
+                bit_index <= bit_index + 1;
+                if (bit_index == 9) begin
+                    busy <= 0;
+                    tx <= 1;  // idle state
+                end
+            end else begin
+                clk_count <= clk_count + 1;
+            end
+        end
+    end
+end
+
+endmodule
+
+
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+TESTBENCH:
+
+`timescale 1ns / 1ps
+`include "UART.v"
+
+module uart_tx_tb;
+
+    reg clk;
+    reg rst;
+    reg [7:0] data;
+    reg start;
+    wire tx;
+    wire busy;
+
+    // Instantiate the UART transmitter
+    uart_tx #(.BAUD_DIV(10)) uut (  // Use small BAUD_DIV for faster sim
+        .clk(clk),
+        .rst(rst),
+        .data(data),
+        .start(start),
+        .tx(tx),
+        .busy(busy)
+    );
+
+    // Generate clock (10ns period -> 100 MHz)
+    always #5 clk = ~clk;
+
+    initial begin
+        // Initialize
+        clk = 0;
+        rst = 1;
+        start = 0;
+        data = 8'b0;
+
+        #20 rst = 0;
+
+        // Wait for a few cycles
+        #20;
+
+        // Send a byte (example: 8'hA5 = 10100101)
+        data = 8'hA5;
+        start = 1;
+
+        #10 start = 0;  // Deassert start after one cycle
+
+        // Wait until transmission is complete
+        wait (busy == 0);
+
+        // Send another byte (optional)
+        #100;
+        data = 8'h3C;
+        start = 1;
+        #10 start = 0;
+
+        wait (busy == 0);
+
+        // Finish simulation
+        #100;
+        $finish;
+    end
+
+endmodule
+
+
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+OUTPUT:
+
+[Running] UART_TB.v
+UART_TB.v:57: $finish called at 2245000 (1ps)
+[Done] exit with code=0 in 1.052 seconds
+
