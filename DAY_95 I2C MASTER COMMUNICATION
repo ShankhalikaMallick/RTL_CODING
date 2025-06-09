@@ -1,0 +1,69 @@
+RTL:
+
+`timescale 1ns / 1ps
+//Date : 09/06/2025
+//Name : Shankhalika Mallick
+
+// DAY-95 INTER INTEGRATED CIRCUIT COMMUNICATION
+
+module i2c_master (
+    input clk, reset,
+    input [7:0] data_in,
+    output reg scl, sda,
+    output reg done
+);
+    
+    always @(posedge clk or posedge reset) begin
+        if (reset) begin
+            scl <= 1;
+            sda <= 1;
+            done <= 0;
+        end else begin
+            // Implement start condition, stop condition, and data transfer
+            done <= 1;
+        end
+    end
+endmodule
+
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+TESTBENCH:
+
+`timescale 1ns / 1ps
+`include "I2C.v"
+
+module tb_i2c_master;
+    reg clk, reset;
+    reg [7:0] data_in;
+    wire scl, sda;
+    wire done;
+
+    i2c_master uut (
+        .clk(clk),
+        .reset(reset),
+        .data_in(data_in),
+        .scl(scl),
+        .sda(sda),
+        .done(done)
+    );
+
+    initial 
+    begin
+        $monitor("scl=%b, sda=%b, done=%b",scl, sda, done);
+        clk = 0; reset = 1; data_in = 8'hA5;
+        #10 reset = 0;
+        #100 $finish;
+    end
+
+    always #5 clk = ~clk;
+endmodule
+
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+OUTPUT:
+
+[Running] I2C_TB.v
+scl=1, sda=1, done=0
+scl=1, sda=1, done=1
+I2C_TB.v:24: $finish called at 110000 (1ps)
+[Done] exit with code=0 in 0.21 seconds
