@@ -1,0 +1,91 @@
+RTL:
+
+`timescale 1ns / 1ps
+//Date : 11/06/2025
+//Name : Shankhalika Mallick
+
+// DAY-97 TRAFFIC LIGHT CONTROLLER
+
+module TRAFFIC(clk, rst, state);
+input clk, rst;
+output [1:0] state;
+parameter RED = 2'b00;
+parameter YELLOW = 2'b01;
+parameter GREEN = 2'b10;
+reg [1:0] state, nextstate ;
+always @(posedge clk)
+begin
+    if(rst)
+    state<= RED;
+    else
+    state<=nextstate;
+end
+always @(*)
+begin
+    nextstate=state;
+    case (state)
+    RED:
+    begin
+        #20;
+        nextstate<= YELLOW;
+    end
+    YELLOW:
+    begin
+        #10;
+        nextstate<= GREEN;
+    end
+    GREEN:
+    begin
+        #20;
+        nextstate<= RED;
+    end
+    endcase
+end
+endmodule
+
+
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+TESTBENCH:
+
+`timescale 1ns / 1ps
+`include "TRAFFIC.v"
+
+module TRAFFIC_TB();
+reg clk, rst;
+wire [1:0] state;
+TRAFFIC ob(clk, rst, state);
+initial begin
+    $monitor($time," state=%d", state);
+    clk=1'b0;
+    rst=1'b1;
+    #7; rst=0;
+    #80 rst=1'b1;
+    #5; rst=1'b0;
+    #50; $finish;
+end
+always
+begin
+    #2;
+    clk=~clk;
+end
+endmodule
+
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+OUTPUT:
+
+[Running] TRAFFIC_TB.v
+                   0 state=x
+                   2 state=0
+                  26 state=1
+                  38 state=2
+                  62 state=0
+                  86 state=1
+                  90 state=0
+                  94 state=1
+                  98 state=2
+                 122 state=0
+TRAFFIC_TB.v:15: $finish called at 142000 (1ps)
+[Done] exit with code=0 in 0.265 seconds
+
