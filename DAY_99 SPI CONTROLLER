@@ -1,0 +1,128 @@
+RTL:
+
+`timescale 1ns / 1ps
+//Date : 13/06/2025
+//Name : Shankhalika Mallick
+
+// DAY-99 SPI CONTROLLER
+
+module SPI(
+input clk, rst, start, miso,
+input [7:0] data_in,
+output reg [7:0] data_out,
+output reg busy, sclk, mosi,cs);
+
+reg [2:0] bit_cnt;
+reg [7:0] shift_reg;
+reg [1:0] state;
+
+parameter IDLE=2'B00;
+parameter TRANSFER=2'B01;
+parameter DONE= 2'B10;
+
+always @(posedge clk)
+begin
+    if(rst==1)
+    begin
+        state<=IDLE;
+        data_out=0;
+        mosi=0;
+        sclk=0;
+        cs=1;
+        busy=0;
+    end
+    else
+    begin
+        case(state)
+        IDLE:
+        begin
+            if(start)
+            begin
+                shift_reg= data_in;
+                bit_cnt= 7;
+                state <= TRANSFER;
+                busy=1;
+                cs=0;
+            end
+        end
+        TRANSFER:
+        begin
+            sclk=~sclk;
+            if(sclk) //positive edge
+                mosi <=shift_reg[bit_cnt];
+            else  // negative edge
+            begin
+                shift_reg [bit_cnt] <=miso;
+                if(bit_cnt==0)
+                state<= DONE;
+                else
+                bit_cnt <= bit_cnt+1;
+            end
+        end
+        DONE:
+        begin
+            data_out<=shift_reg;
+            cs=1;
+            busy=0;
+            state<=IDLE;            
+        end
+        endcase
+    end
+end
+endmodule
+
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+TESTBENCH:
+
+`timescale 1ns / 1ps
+`include "SPI.v"
+
+module SPI_TB();
+reg clk, rst, start, miso;
+reg [7:0] data_in;
+wire [7:0] data_out;
+wire busy, sclk, mosi,cs;
+SPI ob( clk, rst, start, miso, data_in, data_out, busy, sclk, mosi,cs);
+
+initial 
+begin
+    $monitor("data_ou:%d, busy:%b,, sclk:%b , mosi:%b ,cs:%b ", data_out, busy, sclk, mosi,cs );
+    clk=1'b0;
+    rst=1'b1;
+    start=1'b0;
+    data_in = 8'b10101010;
+    miso = 0;
+    #10; 
+    start=1'b1;
+    rst=0;
+    #100;
+    $finish;
+end
+always 
+begin
+    #5; clk=~clk;
+end
+endmodule
+
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+OUTPUT:
+
+[Running] SPI_TB.v
+data_ou:  x, busy:x,, sclk:x , mosi:x ,cs:x 
+data_ou:  0, busy:0,, sclk:0 , mosi:0 ,cs:1 
+data_ou:  0, busy:1,, sclk:0 , mosi:0 ,cs:0 
+data_ou:  0, busy:1,, sclk:1 , mosi:1 ,cs:0 
+data_ou:  0, busy:1,, sclk:0 , mosi:1 ,cs:0 
+data_ou:  0, busy:1,, sclk:1 , mosi:0 ,cs:0 
+data_ou:  0, busy:1,, sclk:0 , mosi:0 ,cs:0 
+data_ou: 42, busy:0,, sclk:0 , mosi:0 ,cs:1 
+data_ou: 42, busy:1,, sclk:0 , mosi:0 ,cs:0 
+data_ou: 42, busy:1,, sclk:1 , mosi:1 ,cs:0 
+data_ou: 42, busy:1,, sclk:0 , mosi:1 ,cs:0 
+data_ou: 42, busy:1,, sclk:1 , mosi:0 ,cs:0 
+SPI_TB.v:23: $finish called at 110000 (1ps)
+[Done] exit with code=0 in 0.158 seconds
+
+
