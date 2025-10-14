@@ -45,7 +45,7 @@ endmodule
 `include "NAND_GATE.v"
 
 module NAND_TB();
-    reg a,b;
+    reg a,b; 
     wire nandab,nota,andab,orab,norab,xorab,xnorab;
     NAND_GATE ob(a,b,nandab,nota,andab,orab,norab,xorab,xnorab);
     initial
